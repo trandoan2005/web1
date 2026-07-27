@@ -2,8 +2,8 @@
 // --- Câu 1.1 ---
 // In ra thông tin cơ bản
 echo "Họ tên: Trần Văn Đoàn<br>";
-echo "Ngày sinh: 01/01/2005<br>";
-echo "Mã số sinh viên: 123456789<br>";
+echo "Ngày sinh: 09/02/2005<br>";
+echo "Mã số sinh viên: 2123110210<br>";
 echo "<hr>";
 
 // --- Câu 1.2 ---
@@ -11,9 +11,9 @@ echo "<hr>";
   Khai báo biến và in ra giá trị
 */
 $hoTen = "Trần Văn Đoàn";
-$mssv = "123456789";
-$sdt = "0901234567";
-$ngaySinh = "01/01/2005";
+$mssv = "2123110210";
+$sdt = "0856440515";
+$ngaySinh = "09/02/2005";
 
 echo "Họ tên từ biến: " . $hoTen . "<br>";
 echo "MSSV từ biến: " . $mssv . "<br>";
