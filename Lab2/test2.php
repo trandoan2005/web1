@@ -1,6 +1,8 @@
 <?php
+// ===== 1. Mảng Menu =====
 $menus = ["Trang chủ", "Sản phẩm", "Khuyến mãi", "Liên hệ"];
 
+// ===== 3. Mảng nhiều chiều Sản phẩm =====
 $products = [
     [
         "name" => "Điện thoại iPhone 15",
@@ -24,10 +26,14 @@ $products = [
     ]
 ];
 
+// ===== 4. Mảng Thương hiệu nổi bật =====
+$brands = ["Apple", "Samsung", "Dell", "Asus"];
+
+// ===== 5. Mảng Danh mục sản phẩm quan tâm (cho select trong form) =====
 $categories = ["Điện thoại", "Máy tính bảng", "Laptop", "Phụ kiện"];
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,6 +44,20 @@ $categories = ["Điện thoại", "Máy tính bảng", "Laptop", "Phụ kiện"]
             background-color: #f8f9fa;
             padding: 50px 0;
             text-align: center;
+        }
+        .brand-item {
+            text-align: center;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            transition: .3s;
+        }
+        .brand-item:hover {
+            background: #e7f1ff;
+            transform: translateY(-3px);
         }
         .footer {
             background-color: #343a40;
@@ -50,17 +70,21 @@ $categories = ["Điện thoại", "Máy tính bảng", "Laptop", "Phụ kiện"]
 </head>
 <body>
 
+<!-- ===== 1. Navbar ===== -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
         <img src="images/logo.png" alt="Logo" width="30" height="24">
         Cửa hàng Đoàn
     </a>
-    <div class="collapse navbar-collapse">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <?php foreach($menus as $menu) { ?>
+        <?php foreach ($menus as $menu) { ?>
         <li class="nav-item">
-          <a class="nav-link" href="#"><?php echo $menu; ?></a>
+          <a class="nav-link" href="#"><?= $menu ?></a>
         </li>
         <?php } ?>
       </ul>
@@ -68,37 +92,45 @@ $categories = ["Điện thoại", "Máy tính bảng", "Laptop", "Phụ kiện"]
   </div>
 </nav>
 
+<!-- ===== 2. Banner (không dùng mảng) ===== -->
 <div class="banner">
     <h1>Cửa hàng Điện máy Đoàn</h1>
     <p>Chuyên cung cấp các sản phẩm công nghệ chính hãng.</p>
 </div>
 
 <div class="container mt-4">
+
+    <!-- ===== 3. Danh sách sản phẩm ===== -->
     <h2>Danh sách sản phẩm</h2>
     <div class="row">
-        <?php foreach($products as $product) { ?>
-        <div class="col-md-3">
-            <div class="card">
-                <img src="<?php echo $product['image']; ?>" class="card-img-top" alt="Hình ảnh sản phẩm">
-                <div class="card-body">
-                    <h5 class="card-title"><?php echo $product['name']; ?></h5>
-                    <p class="card-text"><?php echo number_format($product['price']); ?></p>
-                    <a href="#" class="btn btn-info">Xem chi tiết</a>
-                    <a href="#" class="btn btn-primary">Mua ngay</a>
+        <?php foreach ($products as $product) { ?>
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="<?= $product['image'] ?>" class="card-img-top" alt="Hình ảnh sản phẩm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title"><?= $product['name'] ?></h5>
+                    <p class="card-text"><?= number_format($product['price']) ?> đ</p>
+                    <div class="mt-auto">
+                        <a href="#" class="btn btn-info">Xem chi tiết</a>
+                        <a href="#" class="btn btn-primary">Mua ngay</a>
+                    </div>
                 </div>
             </div>
         </div>
         <?php } ?>
     </div>
 
+    <!-- ===== 4. Thương hiệu nổi bật (dùng mảng + foreach) ===== -->
     <h2 class="mt-5">Thương hiệu nổi bật</h2>
     <div class="row">
-        <div class="col-md-3">Apple</div>
-        <div class="col-md-3">Samsung</div>
-        <div class="col-md-3">Dell</div>
-        <div class="col-md-3">Asus</div>
+        <?php foreach ($brands as $brand) { ?>
+        <div class="col-md-3">
+            <div class="brand-item"><?= $brand ?></div>
+        </div>
+        <?php } ?>
     </div>
 
+    <!-- ===== 5. Form đăng ký nhận báo giá ===== -->
     <h2 class="mt-5">Form đăng ký nhận báo giá</h2>
     <form action="#" method="post">
         <div class="mb-3">
@@ -120,8 +152,8 @@ $categories = ["Điện thoại", "Máy tính bảng", "Laptop", "Phụ kiện"]
         <div class="mb-3">
             <label class="form-label">Danh mục sản phẩm quan tâm</label>
             <select class="form-select" name="category">
-                <?php foreach($categories as $category) { ?>
-                <option value="<?php echo $category; ?>"><?php echo $category; ?></option>
+                <?php foreach ($categories as $category) { ?>
+                <option value="<?= $category ?>"><?= $category ?></option>
                 <?php } ?>
             </select>
         </div>
@@ -146,9 +178,11 @@ $categories = ["Điện thoại", "Máy tính bảng", "Laptop", "Phụ kiện"]
     </form>
 </div>
 
+<!-- ===== 6. Footer (không dùng mảng) ===== -->
 <div class="footer">
     <p>Bản quyền thuộc về cửa hàng của Đoàn.</p>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
