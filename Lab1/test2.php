@@ -15,7 +15,7 @@ $intVar = 5;
 $strVar = "5";
 
 echo "So sánh == (Chỉ so sánh giá trị): ";
-var_dump($intVar == $strVar); 
+var_dump($intVar == $strVar);
 echo "<br>So sánh === (So sánh cả giá trị và kiểu dữ liệu): ";
 var_dump($intVar === $strVar);
 echo "<br>So sánh != (Khác giá trị): ";
@@ -70,9 +70,9 @@ echo "<hr>";
 $str1 = "123 abc";
 $str2 = "abc 123";
 echo "Ép kiểu '123 abc' sang int: ";
-var_dump((int)$str1); // Kết quả 123
+var_dump((int) $str1); // Kết quả 123
 echo "<br>Ép kiểu 'abc 123' sang int: ";
-var_dump((int)$str2); // Kết quả 0
+var_dump((int) $str2); // Kết quả 0
 echo "<hr>";
 
 // --- Câu 2.8 ---
@@ -81,8 +81,12 @@ $var_float = 9.99;
 $var_string = "Hello PHP";
 $var_bool = true;
 
-var_dump($var_int); echo "<br>";
-var_dump($var_float); echo "<br>";
-var_dump($var_string); echo "<br>";
-var_dump($var_bool); echo "<br>";
+var_dump($var_int);
+echo "<br>";
+var_dump($var_float);
+echo "<br>";
+var_dump($var_string);
+echo "<br>";
+var_dump($var_bool);
+echo "<br>";
 ?>
