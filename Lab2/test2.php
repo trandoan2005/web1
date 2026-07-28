@@ -31,6 +31,12 @@ $brands = ["Apple", "Samsung", "Dell", "Asus"];
 
 // ===== 5. Mảng Danh mục sản phẩm quan tâm (cho select trong form) =====
 $categories = ["Điện thoại", "Máy tính bảng", "Laptop", "Phụ kiện"];
+
+// ===== 6. Mảng Hình thức nhận báo giá (radio) =====
+$contact_methods = ["Email", "Điện thoại"];
+
+// ===== 7. Mảng Thời gian liên hệ (select) =====
+$contact_times = ["Buổi sáng (8h-11h)", "Buổi chiều (13h-17h)"];
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -159,14 +165,16 @@ $categories = ["Điện thoại", "Máy tính bảng", "Laptop", "Phụ kiện"]
         </div>
         <div class="mb-3">
             <label class="form-label">Hình thức nhận báo giá</label><br>
-            <input type="radio" name="contact_method" value="Email"> Email
-            <input type="radio" name="contact_method" value="Điện thoại"> Điện thoại
+            <?php foreach ($contact_methods as $method) { ?>
+            <input type="radio" name="contact_method" value="<?= $method ?>"> <?= $method ?>
+            <?php } ?>
         </div>
         <div class="mb-3">
             <label class="form-label">Thời gian liên hệ</label>
             <select class="form-select" name="contact_time">
-                <option value="Buổi sáng (8h-11h)">Buổi sáng (8h-11h)</option>
-                <option value="Buổi chiều (13h-17h)">Buổi chiều (13h-17h)</option>
+                <?php foreach ($contact_times as $time) { ?>
+                <option value="<?= $time ?>"><?= $time ?></option>
+                <?php } ?>
             </select>
         </div>
         <div class="mb-3">
