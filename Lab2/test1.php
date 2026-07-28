@@ -38,13 +38,11 @@ $students = [
  ]
 ];
 
-// Khởi tạo các mảng lưu danh sách
 $faculties = [ "Công nghệ thông tin", "Quản trị kinh doanh", "Kế toán", "Ngôn ngữ Anh" ];
 $classes = [ "A1"=> "CNTT1", "A2"=> "CNTT2", "A3"=> "CNTT3", "A4"=> "CNTT4" ];
 $genders = [ "Nam", "Nữ", "Khác" ];
 $hobbies = [ "LT" => "Lập trình", "DS" => "Đọc sách", "AN" => "Âm nhạc", "DL" => "Du lịch", "TT" => "Thể thao" ];
 ?>
-
 <style>
 *{
  margin: 0;
@@ -161,14 +159,16 @@ background: #084298;
  <div>
  <label>Khoa</label>
  <select>
+ <option>...</option>
  <?php foreach ($faculties as $faculty) { ?>
  <option><?= $faculty ?></option>
  <?php } ?>
  </select>
  </div>
  <div>
- <label>Lớp học</label>
+ <label>Lớp</label>
  <select>
+ <option value="....">...</option>
  <?php foreach ($classes as $key => $class) { ?>
  <option value="<?= $key ?>"><?= $class ?></option>
  <?php } ?>
@@ -187,8 +187,8 @@ background: #084298;
  <?php } ?>
  </div>
  <div>
- <button type="submit">Đăng ký</button>
- <button type="reset">Làm mới</button>
+ <input type="submit" value="Submit">
+ <input type="reset" value="Reset">
  </div>
  </form>
 </section>
