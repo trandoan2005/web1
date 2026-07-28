@@ -82,7 +82,7 @@ $categories = ["Điện thoại", "Máy tính bảng", "Laptop", "Phụ kiện"]
                 <img src="<?php echo $product['image']; ?>" class="card-img-top" alt="Hình ảnh sản phẩm">
                 <div class="card-body">
                     <h5 class="card-title"><?php echo $product['name']; ?></h5>
-                    <p class="card-text">Giá: <?php echo number_format($product['price']); ?> VNĐ</p>
+                    <p class="card-text"><?php echo number_format($product['price']); ?></p>
                     <a href="#" class="btn btn-info">Xem chi tiết</a>
                     <a href="#" class="btn btn-primary">Mua ngay</a>
                 </div>
