@@ -1,59 +1,72 @@
 <?php
+// 1. Menu
 $menus = ["Trang chủ", "Sản phẩm", "Khuyến mãi", "Liên hệ"];
+
+// 3. Danh sách sản phẩm (mảng nhiều chiều)
 $products = [
     [
-        "name" => "Sản phẩm A",
-        "price" => 1500000
+        "name" => "Sản phẩm 1",
+        "price" => 1500000,
+        "image" => "images/default-product.jpg"
     ],
     [
-        "name" => "Sản phẩm B",
-        "price" => 2000000
+        "name" => "Sản phẩm 2",
+        "price" => 2500000,
+        "image" => "images/default-product.jpg"
     ],
     [
-        "name" => "Sản phẩm C",
-        "price" => 3500000
+        "name" => "Sản phẩm 3",
+        "price" => 3000000,
+        "image" => "images/default-product.jpg"
     ],
     [
-        "name" => "Sản phẩm D",
-        "price" => 500000
+        "name" => "Sản phẩm 4",
+        "price" => 4000000,
+        "image" => "images/default-product.jpg"
     ]
 ];
-$brands = ["Thương hiệu 1", "Thương hiệu 2", "Thương hiệu 3", "Thương hiệu 4"];
-$categories = ["Điện thoại", "Máy tính bảng", "Laptop", "Phụ kiện"];
+
+// 5. Danh mục sản phẩm quan tâm (mảng)
+$categories = ["Điện thoại", "Máy tính bảng", "Laptop"];
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lab 2 - Test 2 - Sản phẩm</title>
-<!-- Bootstrap 5 CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<style>
-    .banner {
-        background: url('https://via.placeholder.com/1200x400/0d6efd/ffffff?text=Banner+C%E1%BB%ADa+H%C3%A0ng') center/cover;
-        color: white;
-        padding: 100px 0;
-        text-align: center;
-    }
-    .product-card img {
-        height: 200px;
-        object-fit: cover;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 2 - Test 2</title>
+    <!-- Sử dụng CSS framework Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- kết hợp CSS thuần để thiết kế giao diện -->
+    <style>
+        .banner {
+            background-color: #f8f9fa;
+            padding: 50px 0;
+            text-align: center;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 50px;
+        }
+    </style>
 </head>
 <body>
 
-<!-- 1. Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="#">LOGO CỬA HÀNG</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <?php foreach ($menus as $menu) { ?>
+<!-- 1. Thanh Menu (Navbar) -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <!-- Hiển thị Logo cửa hàng -->
+    <a class="navbar-brand" href="#">
+        <img src="images/logo.png" alt="Logo" width="30" height="24">
+        Logo Cửa Hàng
+    </a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav">
+        <!-- Hiển thị menu bằng vòng lặp foreach -->
+        <?php foreach($menus as $menu) { ?>
         <li class="nav-item">
           <a class="nav-link" href="#"><?= $menu ?></a>
         </li>
@@ -65,25 +78,30 @@ $categories = ["Điện thoại", "Máy tính bảng", "Laptop", "Phụ kiện"]
 
 <!-- 2. Banner -->
 <div class="banner">
-    <div class="container">
-        <h1 class="display-4 fw-bold">CHÀO MỪNG ĐẾN VỚI CỬA HÀNG</h1>
-        <p class="lead">Cung cấp các sản phẩm chất lượng với giá tốt nhất thị trường.</p>
-    </div>
+    <!-- Có tiêu đề, Có mô tả ngắn -->
+    <h1>Tiêu đề Banner Cửa Hàng</h1>
+    <p>Đây là mô tả ngắn giới thiệu về cửa hàng của chúng tôi.</p>
 </div>
 
-<div class="container my-5">
+<div class="container mt-4">
     <!-- 3. Danh sách sản phẩm -->
-    <h2 class="text-center mb-4 text-primary">DANH SÁCH SẢN PHẨM</h2>
+    <h2>Danh sách sản phẩm</h2>
+    <!-- Hiển thị bằng Bootstrap Grid -->
     <div class="row">
-        <?php foreach ($products as $product) { ?>
-        <div class="col-md-3 mb-4">
-            <div class="card product-card">
-                <img src="images/default-product.jpg" class="card-img-top" alt="<?= $product['name'] ?>" onerror="this.src='https://via.placeholder.com/300x200?text=S%E1%BA%A3n+ph%E1%BA%A9m'">
-                <div class="card-body text-center">
+        <?php foreach($products as $product) { ?>
+        <div class="col-md-3">
+            <!-- Hiển thị bằng Bootstrap Card -->
+            <div class="card">
+                <!-- Hình ảnh (sử dụng cùng một ảnh mặc định cho tất cả sản phẩm) -->
+                <img src="<?= $product['image'] ?>" class="card-img-top" alt="Hình ảnh sản phẩm">
+                <div class="card-body">
+                    <!-- Tên sản phẩm -->
                     <h5 class="card-title"><?= $product['name'] ?></h5>
-                    <p class="card-text text-danger fw-bold"><?= number_format($product['price'], 0, ',', '.') ?> VNĐ</p>
-                    <a href="#" class="btn btn-outline-primary btn-sm">Xem chi tiết</a>
-                    <a href="#" class="btn btn-primary btn-sm">Mua ngay</a>
+                    <!-- Giá bán (sử dụng hàm number_format() để định dạng có dấu phân cách hàng nghìn) -->
+                    <p class="card-text">Giá: <?= number_format($product['price']) ?> VNĐ</p>
+                    <!-- Nút Xem chi tiết, Nút Mua ngay -->
+                    <a href="#" class="btn btn-info">Xem chi tiết</a>
+                    <a href="#" class="btn btn-primary">Mua ngay</a>
                 </div>
             </div>
         </div>
@@ -91,93 +109,76 @@ $categories = ["Điện thoại", "Máy tính bảng", "Laptop", "Phụ kiện"]
     </div>
 
     <!-- 4. Thương hiệu nổi bật -->
-    <h2 class="text-center my-4 text-primary">THƯƠNG HIỆU NỔI BẬT</h2>
-    <div class="row text-center mb-5">
-        <?php foreach ($brands as $brand) { ?>
-        <div class="col-md-3">
-            <div class="p-3 bg-light border rounded">
-                <strong><?= $brand ?></strong>
-            </div>
-        </div>
-        <?php } ?>
+    <h2 class="mt-5">Thương hiệu nổi bật</h2>
+    <!-- Hiển thị danh sách thương hiệu bằng Bootstrap Grid -->
+    <div class="row">
+        <div class="col-md-3">Thương hiệu A</div>
+        <div class="col-md-3">Thương hiệu B</div>
+        <div class="col-md-3">Thương hiệu C</div>
+        <div class="col-md-3">Thương hiệu D</div>
     </div>
 
     <!-- 5. Form đăng ký nhận báo giá -->
-    <h2 class="text-center mb-4 text-primary">ĐĂNG KÝ NHẬN BÁO GIÁ</h2>
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm p-4">
-                <form action="#" method="post">
-                    <div class="mb-3">
-                        <label class="form-label">Họ và tên</label>
-                        <input type="text" class="form-control" name="fullname" required>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Số điện thoại</label>
-                            <input type="tel" class="form-control" name="phone" required>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Địa chỉ</label>
-                        <input type="text" class="form-control" name="address">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label class="form-label">Danh mục sản phẩm quan tâm</label>
-                        <select class="form-select" name="category">
-                            <option value="">-- Chọn danh mục --</option>
-                            <?php foreach ($categories as $cat) { ?>
-                            <option><?= $cat ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label d-block">Hình thức nhận báo giá</label>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="contact_method" id="rEmail" value="Email">
-                            <label class="form-check-label" for="rEmail">Email</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="contact_method" id="rPhone" value="Điện thoại">
-                            <label class="form-check-label" for="rPhone">Điện thoại</label>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Thời gian liên hệ</label>
-                        <select class="form-select" name="contact_time">
-                            <option>Buổi sáng (8h-11h)</option>
-                            <option>Buổi chiều (13h-17h)</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Nội dung yêu cầu</label>
-                        <textarea class="form-control" name="message" rows="3"></textarea>
-                    </div>
-
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary px-4">Gửi yêu cầu</button>
-                        <button type="reset" class="btn btn-secondary px-4">Làm mới</button>
-                    </div>
-                </form>
-            </div>
+    <h2 class="mt-5">Form đăng ký nhận báo giá</h2>
+    <form action="#" method="post">
+        <!-- Họ và tên -->
+        <div class="mb-3">
+            <label class="form-label">Họ và tên</label>
+            <input type="text" class="form-control" name="fullname">
         </div>
-    </div>
+        <!-- Email -->
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" name="email">
+        </div>
+        <!-- Số điện thoại -->
+        <div class="mb-3">
+            <label class="form-label">Số điện thoại</label>
+            <input type="text" class="form-control" name="phone">
+        </div>
+        <!-- Địa chỉ -->
+        <div class="mb-3">
+            <label class="form-label">Địa chỉ</label>
+            <input type="text" class="form-control" name="address">
+        </div>
+        <!-- Danh mục sản phẩm quan tâm (<select>) - Được hiển thị từ mảng bằng vòng lặp foreach -->
+        <div class="mb-3">
+            <label class="form-label">Danh mục sản phẩm quan tâm</label>
+            <select class="form-select" name="category">
+                <?php foreach($categories as $category) { ?>
+                <option value="<?= $category ?>"><?= $category ?></option>
+                <?php } ?>
+            </select>
+        </div>
+        <!-- Hình thức nhận báo giá (Radio Button) -->
+        <div class="mb-3">
+            <label class="form-label">Hình thức nhận báo giá</label><br>
+            <input type="radio" name="contact_method" value="Email"> Email
+            <input type="radio" name="contact_method" value="Điện thoại"> Điện thoại
+        </div>
+        <!-- Thời gian liên hệ (<select>) -->
+        <div class="mb-3">
+            <label class="form-label">Thời gian liên hệ</label>
+            <select class="form-select" name="contact_time">
+                <option value="Buổi sáng (8h-11h)">Buổi sáng (8h-11h)</option>
+                <option value="Buổi chiều (13h-17h)">Buổi chiều (13h-17h)</option>
+            </select>
+        </div>
+        <!-- Nội dung yêu cầu (<textarea>) -->
+        <div class="mb-3">
+            <label class="form-label">Nội dung yêu cầu</label>
+            <textarea class="form-control" name="request_content"></textarea>
+        </div>
+        <!-- Thêm hai nút: Gửi yêu cầu (Submit), Làm mới (Reset) -->
+        <button type="submit" class="btn btn-success">Gửi yêu cầu</button>
+        <button type="reset" class="btn btn-secondary">Làm mới</button>
+    </form>
 </div>
 
 <!-- 6. Footer -->
-<footer class="bg-dark text-white text-center py-3 mt-5">
-    <p class="mb-0">&copy; 2026 Cửa hàng của chúng tôi. Bản quyền đã được bảo lưu.</p>
-</footer>
+<div class="footer">
+    <p>Bản quyền thuộc về cửa hàng.</p>
+</div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
