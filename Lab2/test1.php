@@ -1,56 +1,13 @@
-<?php
-// Khởi tạo mảng menu
-$menus = [
-"Trang chủ",
-"Tin tức",
-"Liên hệ",
-"Giới thiệu"
-];
-
-// Khởi tạo biến lưu mảng chứa danh sách môn học
-$subjects = [ "HTML", "CSS", "JavaScript", "PHP", "MySQL" ];
-
-// Khởi tạo mảng chứa danh sách sinh viên
-$students = [
- [
- "id" => "SV001",
- "name" => "Nguyễn Văn An",
- "gender" => "Nam",
- "class" => "CNTT1"
- ],
- [
- "id" => "SV002",
- "name" => "Trần Thị Bình",
- "gender" => "Nữ",
- "class" => "CNTT2"
- ],
- [
- "id" => "SV003",
- "name" => "Lê Văn Cường",
- "gender" => "Nam",
- "class" => "CNTT1"
- ],
- [
- "id" => "SV004",
- "name" => "Phạm Thị Dung",
- "gender" => "Nữ",
- "class" => "CNTT3"
- ]
-];
-
-$faculties = [ "Công nghệ thông tin", "Quản trị kinh doanh", "Kế toán", "Ngôn ngữ Anh" ];
-$classes = [ "A1"=> "CNTT1", "A2"=> "CNTT2", "A3"=> "CNTT3", "A4"=> "CNTT4" ];
-$genders = [ "Nam", "Nữ", "Khác" ];
-$hobbies = [ "LT" => "Lập trình", "DS" => "Đọc sách", "AN" => "Âm nhạc", "DL" => "Du lịch", "TT" => "Thể thao" ];
-?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Lab 2 - Test 1</title>
 <style>
 *{
  margin: 0;
  padding: 0;
  box-sizing: border-box;
-}
-body{
- padding: 20px;
 }
 nav {
  background:rgb(4, 40, 94);
@@ -74,6 +31,9 @@ nav ul li:hover {
 background: #084298;
 }
 
+body{
+ padding: 20px;
+}
 .s1{
  width: 500px;
  margin: auto;
@@ -103,7 +63,18 @@ background: #084298;
  transform: translateX(5px);
 }
 </style>
+</head>
+<body>
 
+<?php
+// Khởi tạo mảng menu
+$menus = [
+ "Trang chủ",
+ "Tin tức",
+ "Liên hệ",
+ "Giới thiệu"
+];
+?>
 <!-- =====Menu====== -->
 <nav>
 <ul>
@@ -115,6 +86,10 @@ background: #084298;
 </ul>
 </nav>
 
+<?php
+// Khởi tạo biến lưu mảng chứa danh sách môn học:
+$subjects = [ "HTML", "CSS", "JavaScript", "PHP", "MySQL" ];
+?>
 <section class="s1">
  <h3>Danh sách ngôn ngữ sử dụng trong môn học</h3>
  <ul>
@@ -127,6 +102,35 @@ background: #084298;
  </ul>
 </section>
 
+<?php
+// Khởi tạo mảng chứa danh sách sinh viên
+$students = [
+ [
+ "id" => "SV001",
+ "name" => "Nguyễn Văn An",
+ "gender" => "Nam",
+ "class" => "CNTT1"
+ ],
+ [
+ "id" => "SV002",
+ "name" => "Trần Thị Bình",
+ "gender" => "Nữ",
+ "class" => "CNTT2"
+ ],
+ [
+ "id" => "SV003",
+ "name" => "Lê Văn Cường",
+ "gender" => "Nam",
+ "class" => "CNTT1"
+ ],
+ [
+ "id" => "SV004",
+ "name" => "Phạm Thị Dung",
+ "gender" => "Nữ",
+ "class" => "CNTT3"
+ ]
+];
+?>
 <section class="s2">
  <h3>Danh sách sinh viên</h3>
  <table>
@@ -149,6 +153,13 @@ background: #084298;
  </table>
 </section>
 
+<?php
+// Khởi tạo các mảng lưu danh sách Khoa (Faculties), Lớp học (Classes), Giới tính (Genders) , Sở thích (Hobbies)
+$faculties = [ "Công nghệ thông tin", "Quản trị kinh doanh", "Kế toán", "Ngôn ngữ Anh" ];
+$classes = [ "A1"=> "CNTT1", "A2"=> "CNTT2", "A3"=> "CNTT3", "A4"=> "CNTT4" ];
+$genders = [ "Nam", "Nữ", "Khác" ];
+$hobbies = [ "LT" => "Lập trình", "DS" => "Đọc sách", "AN" => "Âm nhạc", "DL" => "Du lịch", "TT" => "Thể thao" ];
+?>
 <section class="s3">
  <h3>ĐĂNG KÝ THÔNG TIN SINH VIÊN</h3>
  <form action="#" method="post">
@@ -158,8 +169,7 @@ background: #084298;
  </div>
  <div>
  <label>Khoa</label>
- <select>
- <option>...</option>
+ <select> <option>…</option>
  <?php foreach ($faculties as $faculty) { ?>
  <option><?= $faculty ?></option>
  <?php } ?>
@@ -167,8 +177,7 @@ background: #084298;
  </div>
  <div>
  <label>Lớp</label>
- <select>
- <option value="....">...</option>
+ <select> <option value="....">...</option>
  <?php foreach ($classes as $key => $class) { ?>
  <option value="<?= $key ?>"><?= $class ?></option>
  <?php } ?>
@@ -187,8 +196,11 @@ background: #084298;
  <?php } ?>
  </div>
  <div>
- <input type="submit" value="Submit">
- <input type="reset" value="Reset">
+ <button type="submit">Đăng ký</button>
+ <button type="reset">Làm mới</button>
  </div>
  </form>
 </section>
+
+</body>
+</html>
