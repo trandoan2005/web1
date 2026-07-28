@@ -1,8 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Lab 2 - Test 1</title>
+<?php
+// Khởi tạo mảng menu
+$menus = [
+ "Trang chủ",
+ "Tin tức",
+ "Liên hệ",
+ "Giới thiệu"
+];
+?>
+<!-- =====Menu====== -->
+<nav>
+<ul>
+<?php foreach ($menus as $menu) { ?>
+<li>
+<a href="#"><?php echo $menu; ?></a>
+</li>
+<?php } ?>
+</ul>
+</nav>
+
+<?php
+// Khởi tạo biến lưu mảng chứa danh sách môn học:
+$subjects = [ "HTML", "CSS", "JavaScript", "PHP", "MySQL" ];
+?>
 <style>
 *{
  margin: 0;
@@ -63,33 +82,6 @@ body{
  transform: translateX(5px);
 }
 </style>
-</head>
-<body>
-
-<?php
-// Khởi tạo mảng menu
-$menus = [
- "Trang chủ",
- "Tin tức",
- "Liên hệ",
- "Giới thiệu"
-];
-?>
-<!-- =====Menu====== -->
-<nav>
-<ul>
-<?php foreach ($menus as $menu) { ?>
-<li>
-<a href="#"><?= $menu ?></a>
-</li>
-<?php } ?>
-</ul>
-</nav>
-
-<?php
-// Khởi tạo biến lưu mảng chứa danh sách môn học:
-$subjects = [ "HTML", "CSS", "JavaScript", "PHP", "MySQL" ];
-?>
 <section class="s1">
  <h3>Danh sách ngôn ngữ sử dụng trong môn học</h3>
  <ul>
@@ -143,11 +135,11 @@ $students = [
  </tr>
  <?php foreach ($students as $index => $student) { ?>
  <tr>
- <td><?= $index + 1 ?></td>
- <td><?= $student["id"] ?></td>
- <td><?= $student["name"] ?></td>
- <td><?= $student["gender"] ?></td>
- <td><?= $student["class"] ?></td>
+ <td><?php echo $index + 1; ?></td>
+ <td><?php echo $student["id"]; ?></td>
+ <td><?php echo $student["name"]; ?></td>
+ <td><?php echo $student["gender"]; ?></td>
+ <td><?php echo $student["class"]; ?></td>
  </tr>
  <?php } ?>
  </table>
@@ -171,7 +163,7 @@ $hobbies = [ "LT" => "Lập trình", "DS" => "Đọc sách", "AN" => "Âm nhạc
  <label>Khoa</label>
  <select> <option>…</option>
  <?php foreach ($faculties as $faculty) { ?>
- <option><?= $faculty ?></option>
+ <option><?php echo $faculty; ?></option>
  <?php } ?>
  </select>
  </div>
@@ -179,20 +171,20 @@ $hobbies = [ "LT" => "Lập trình", "DS" => "Đọc sách", "AN" => "Âm nhạc
  <label>Lớp</label>
  <select> <option value="....">...</option>
  <?php foreach ($classes as $key => $class) { ?>
- <option value="<?= $key ?>"><?= $class ?></option>
+ <option value="<?php echo $key; ?>"><?php echo $class; ?></option>
  <?php } ?>
  </select>
  </div>
  <div>
  <label>Giới tính</label>
  <?php foreach ($genders as $gender) { ?>
- <input type="radio" name="gender" value="<?= $gender ?>"> <?= $gender ?>
+ <input type="radio" name="gender" value="<?php echo $gender; ?>"> <?php echo $gender; ?>
  <?php } ?>
  </div>
  <div>
  <label>Sở thích</label>
  <?php foreach ($hobbies as $key => $hobby) { ?>
- <input type="checkbox" name="hobbies[]" value="<?= $key ?>"> <?= $hobby ?>
+ <input type="checkbox" name="hobbies[]" value="<?php echo $key; ?>"> <?php echo $hobby; ?>
  <?php } ?>
  </div>
  <div>
@@ -201,6 +193,3 @@ $hobbies = [ "LT" => "Lập trình", "DS" => "Đọc sách", "AN" => "Âm nhạc
  </div>
  </form>
 </section>
-
-</body>
-</html>
