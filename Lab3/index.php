@@ -41,6 +41,10 @@ $products_C2 = [
         <?php showProductTable($products_C2, "Danh sách Phụ kiện", "VNĐ", 2); ?>
     </section>
 
+    <section class="mb-5">
+        <h2>Giới thiệu</h2>
+        <p>Trang web quản lý sản phẩm và sinh viên - Trần Văn Đoàn - 2123110210</p>
+    </section>
 </main>
 
 <?php

@@ -87,28 +87,19 @@ class Student
         return "Không";
     }
 
-    /**
-     * Trả về class màu theo xếp loại
-     * @return string
-     */
-    public function getRowClass(): string
-    {
-        $rank = $this->getRank();
-        switch ($rank) {
-            case "Xuất sắc": return "table-success";
-            case "Giỏi": return "table-info";
-            case "Khá": return "table-primary";
-            case "Trung bình": return "table-warning";
-            case "Yếu": return "table-danger";
-            default: return "";
-        }
-    }
-
     // Hiển thị 1 dòng trong bảng
     public function showInfo(): void
     {
+        $rowClass = "";
+        $rank = $this->getRank();
+        if ($rank == "Xuất sắc") $rowClass = "table-success";
+        elseif ($rank == "Giỏi") $rowClass = "table-info";
+        elseif ($rank == "Khá") $rowClass = "table-primary";
+        elseif ($rank == "Trung bình") $rowClass = "table-warning";
+        elseif ($rank == "Yếu") $rowClass = "table-danger";
+
         echo "
-            <tr class='{$this->getRowClass()}'>
+            <tr class='$rowClass'>
                 <td>{$this->studentId}</td>
                 <td>{$this->fullName}</td>
                 <td>{$this->gender}</td>

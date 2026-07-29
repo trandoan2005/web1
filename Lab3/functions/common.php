@@ -6,12 +6,11 @@
  * Tham số mặc định (default parameter)
  * @param mixed $price
  * @param mixed $currency
- * @param int $decimals
  * @return string
  */
-function formatPrice($price, $currency = "đ", $decimals = 0)
+function formatPrice($price, $currency = "đ")
 {
-    return number_format($price, $decimals, ",", ".") . " $currency";
+    return number_format($price, 0, ",", ".") . " $currency";
 }
 
 /**
@@ -77,7 +76,7 @@ function showProductTable($products, $tableTitle, $currency = "đ", $decimals = 
         echo "<td>{$product['id']}</td>";
         echo "<td>{$product['proname']}</td>";
         echo "<td class='text-center'>{$product['quantity']}</td>";
-        echo "<td class='text-end'>" . formatPrice($product['price'], $currency, $decimals) . "</td>";
+        echo "<td class='text-end'>" . number_format($product['price'], $decimals, ",", ".") . " $currency" . "</td>";
         echo "</tr>";
     }
     echo "

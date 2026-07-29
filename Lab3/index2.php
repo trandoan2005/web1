@@ -3,11 +3,13 @@ require "includes/header.php";
 require_once "classes/Student.php";
 
 // Dashboard functions
-function countStudents($students) {
+function countStudents($students)
+{
     return count($students);
 }
 
-function countMaleStudents($students) {
+function countMaleStudents($students)
+{
     $count = 0;
     foreach ($students as $student) {
         if ($student->gender == "Nam") $count++;
@@ -15,7 +17,8 @@ function countMaleStudents($students) {
     return $count;
 }
 
-function countFemaleStudents($students) {
+function countFemaleStudents($students)
+{
     $count = 0;
     foreach ($students as $student) {
         if ($student->gender == "Nữ") $count++;
@@ -23,7 +26,8 @@ function countFemaleStudents($students) {
     return $count;
 }
 
-function countScholarshipStudents($students) {
+function countScholarshipStudents($students)
+{
     $count = 0;
     foreach ($students as $student) {
         if ($student->getScholarship() == "Có") $count++;
@@ -31,7 +35,8 @@ function countScholarshipStudents($students) {
     return $count;
 }
 
-function countExcellentStudents($students) {
+function countExcellentStudents($students)
+{
     $count = 0;
     foreach ($students as $student) {
         if ($student->getRank() == "Xuất sắc") $count++;
@@ -39,7 +44,8 @@ function countExcellentStudents($students) {
     return $count;
 }
 
-function getAverageScore($students) {
+function getAverageScore($students)
+{
     $total = 0;
     foreach ($students as $student) {
         $total += $student->getAverage();
@@ -47,7 +53,8 @@ function getAverageScore($students) {
     return round($total / count($students), 2);
 }
 
-function getHighestAverage($students) {
+function getHighestAverage($students)
+{
     $max = 0;
     foreach ($students as $student) {
         $avg = $student->getAverage();
@@ -56,7 +63,8 @@ function getHighestAverage($students) {
     return $max;
 }
 
-function getLowestAverage($students) {
+function getLowestAverage($students)
+{
     $min = 10;
     foreach ($students as $student) {
         $avg = $student->getAverage();
