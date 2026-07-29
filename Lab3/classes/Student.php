@@ -90,29 +90,21 @@ class Student
     // Hiển thị 1 dòng trong bảng
     public function showInfo(): void
     {
-        $rowClass = "";
-        $rank = $this->getRank();
-        if ($rank == "Xuất sắc") $rowClass = "table-success";
-        elseif ($rank == "Giỏi") $rowClass = "table-info";
-        elseif ($rank == "Khá") $rowClass = "table-primary";
-        elseif ($rank == "Trung bình") $rowClass = "table-warning";
-        elseif ($rank == "Yếu") $rowClass = "table-danger";
-
         echo "
-            <tr class='$rowClass'>
-                <td>{$this->studentId}</td>
-                <td>{$this->fullName}</td>
-                <td>{$this->gender}</td>
-                <td>{$this->birthYear}</td>
-                <td>{$this->scoreHtml}</td>
-                <td>{$this->scoreCss}</td>
-                <td>{$this->scorePhp}</td>
-                <td>{$this->getTotalScore()}</td>
-                <td>{$this->getAge()}</td>
-                <td>{$this->getAverage()}</td>
-                <td>{$this->getRank()}</td>
-                <td>{$this->getScholarship()}</td>
-            </tr>
-        ";
+        <tr>
+            <td>{$this->studentId}</td>
+            <td>{$this->fullName}</td>
+            <td>{$this->gender}</td>
+            <td>{$this->birthYear}</td>
+            <td>{$this->scoreHtml}</td>
+            <td>{$this->scoreCss}</td>
+            <td>{$this->scorePhp}</td>
+            <td>{$this->getTotalScore()}</td>
+            <td>{$this->getAge()}</td>
+            <td>{$this->getAverage()}</td>
+            <td>{$this->getRank()}</td>
+            <td>{$this->getScholarship()}</td>
+        </tr>
+    ";
     }
 }

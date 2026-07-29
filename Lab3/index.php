@@ -34,16 +34,16 @@ $products_C2 = [
 <main class="container my-5">
 
     <section class="mb-5">
-        <?php showProductTable($products_C1, "Danh sách Laptop"); ?>
+        <?php showProductTable($products_C1, "Danh sách Loại C1"); ?>
     </section>
 
     <section class="mb-5">
-        <?php showProductTable($products_C2, "Danh sách Phụ kiện", "VNĐ", 2); ?>
+        <?php showProductTable($products_C2, "Danh sách Loại C2"); ?>
     </section>
 
     <section class="mb-5">
-        <h2>Giới thiệu</h2>
-        <p>Trang web quản lý sản phẩm và sinh viên - Trần Văn Đoàn - 2123110210</p>
+        <h2>Lorem ipsum dolor sit amet.</h2>
+        <p>…</p>
     </section>
 </main>
 

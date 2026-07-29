@@ -50,11 +50,9 @@ function getTotalPrice($products)
  *
  * @param array $products Danh sách sản phẩm.
  * @param string $tableTitle Tiêu đề bảng.
- * @param string $currency Đơn vị tiền tệ.
- * @param int $decimals Số chữ số thập phân.
  * @return void
  */
-function showProductTable($products, $tableTitle, $currency = "đ", $decimals = 0)
+function showProductTable($products, $tableTitle)
 {
     echo "<h3 class='mt-4 mb-3'>$tableTitle</h3>";
     echo "<table class='table table-bordered table-hover table-striped align-middle'>";
@@ -76,7 +74,7 @@ function showProductTable($products, $tableTitle, $currency = "đ", $decimals = 
         echo "<td>{$product['id']}</td>";
         echo "<td>{$product['proname']}</td>";
         echo "<td class='text-center'>{$product['quantity']}</td>";
-        echo "<td class='text-end'>" . number_format($product['price'], $decimals, ",", ".") . " $currency" . "</td>";
+        echo "<td class='text-end'>" . formatPrice($product['price']) . "</td>";
         echo "</tr>";
     }
     echo "
