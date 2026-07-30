@@ -21,8 +21,8 @@ $students = [
     new Student("SV016", "Hồ Thị P", "Nữ", 2004, 8.0, 8.0, 8.5),
     new Student("SV017", "Dương Văn Q", "Nam", 2005, 7.5, 7.0, 7.5),
     new Student("SV018", "Lương Thị R", "Nữ", 2005, 6.0, 7.0, 6.5),
-    new Student("SV019", "Tạ Văn S", "Nam", 2004, 9.0, 8.5, 9.5),
-    new Student("SV020", "Châu Thị T", "Nữ", 2005, 5.5, 5.0, 4.5),
+    new Student("SV019", "Trần Văn Đoàn", "Nam", 2005, 10.0, 10.0, 9.5),
+    new Student("SV020", "Diễm Trần", "Nữ", 1990, 5.5, 5.0, 4.5),
 ];
 ?>
 <!-- main -->

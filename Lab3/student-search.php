@@ -74,10 +74,6 @@ if ($is_searched) {
                 <div class="col-md-4 mb-3">
                     <label>Giới tính</label><br>
                     <div class="form-check form-check-inline mt-2">
-                        <input class="form-check-input" type="radio" name="gender" id="genderAll" value="" <?= $search_gender == '' ? 'checked' : '' ?>>
-                        <label class="form-check-label" for="genderAll">Tất cả</label>
-                    </div>
-                    <div class="form-check form-check-inline mt-2">
                         <input class="form-check-input" type="radio" name="gender" id="genderMale" value="Nam" <?= $search_gender == 'Nam' ? 'checked' : '' ?>>
                         <label class="form-check-label" for="genderMale">Nam</label>
                     </div>
@@ -135,7 +131,7 @@ if ($is_searched) {
             </table>
         <?php else: ?>
             <div class="alert alert-warning text-center">
-                Không tìm thấy sinh viên phù hợp
+                Không tìm thấy sinh viên phù hợp.
             </div>
         <?php endif; ?>
     </section>
