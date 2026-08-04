@@ -1,0 +1,25 @@
+/* Custom styling for Hotel Mini */
+.status-available {
+    color: #198754; /* Bootstrap success green */
+    font-weight: bold;
+}
+.status-booked {
+    color: #dc3545; /* Bootstrap danger red */
+    font-weight: bold;
+}
+.status-maintenance {
+    color: #fd7e14; /* Bootstrap orange */
+    font-weight: bold;
+}
+.room-img-thumbnail {
+    width: 100px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.room-img-detail {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+}
