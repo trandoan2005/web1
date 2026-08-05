@@ -1,0 +1,7 @@
+/* Lab 5 - Custom Styles */
+.table th {
+    vertical-align: middle;
+}
+.btn-action {
+    margin: 2px;
+}
