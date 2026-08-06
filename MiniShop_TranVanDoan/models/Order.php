@@ -8,6 +8,7 @@ class Order
     public $note;
     public $createdAt;
     public $updatedAt;
+    public $customerName; // Thêm thuộc tính này cho Dashboard
 
     public function __construct($id = 0, $customerId = 0, $totalAmount = 0, $status = 'Chờ xử lý', $note = '', $createdAt = '', $updatedAt = '')
     {
