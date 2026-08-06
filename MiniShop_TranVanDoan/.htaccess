@@ -1,0 +1,5 @@
+RewriteEngine On
+RewriteBase /TranVanDoan_LTW1/MiniShop_TranVanDoan/
+
+# Redirect root to admin dashboard
+RewriteRule ^$ views/admin/dashboard.php [L]
