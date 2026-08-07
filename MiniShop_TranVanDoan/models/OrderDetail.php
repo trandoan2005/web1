@@ -7,6 +7,9 @@ class OrderDetail
     public $quantity;
     public $price;
     public $createdAt;
+    
+    public $productName;
+    public $productImage;
 
     public function __construct($id = 0, $orderId = 0, $productId = 0, $quantity = 1, $price = 0, $createdAt = '')
     {

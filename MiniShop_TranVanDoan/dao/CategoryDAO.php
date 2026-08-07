@@ -9,11 +9,25 @@ class CategoryDAO extends BaseDAO
         parent::__construct('categories');
     }
 
-    public function getAll()
+    public function getAll($keyword = "")
     {
         try {
-            $sql = "SELECT * FROM categories ORDER BY id ASC";
-            $result = $this->executeQuery($sql);
+            $sql = "SELECT * FROM categories";
+            $keyword = trim($keyword);
+            
+            if (!empty($keyword)) {
+                $sql .= " WHERE name LIKE ? OR description LIKE ?";
+            }
+            $sql .= " ORDER BY id ASC";
+            
+            if (!empty($keyword)) {
+                $searchParam = "%" . $keyword . "%";
+                $stmt = $this->executePrepared($sql, "ss", $searchParam, $searchParam);
+                $result = $stmt->get_result();
+            } else {
+                $result = $this->executeQuery($sql);
+            }
+            
             $list = [];
             while ($row = $result->fetch_assoc()) {
                 $list[] = new Category($row['id'], $row['name'], $row['description'], $row['image'], $row['status'], $row['created_at'], $row['updated_at']);

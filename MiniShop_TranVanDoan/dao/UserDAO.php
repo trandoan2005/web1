@@ -14,11 +14,24 @@ class UserDAO extends BaseDAO
         return new User($row['id'], $row['username'], $row['password'], $row['fullname'], $row['email'], $row['phone'], $row['role'], $row['status'], $row['created_at'], $row['updated_at']);
     }
 
-    public function getAll()
+    public function getAll($keyword = "")
     {
         try {
-            $sql = "SELECT * FROM users ORDER BY id ASC";
-            $result = $this->executeQuery($sql);
+            $sql = "SELECT * FROM users";
+            $keyword = trim($keyword);
+            
+            if (!empty($keyword)) {
+                $sql .= " WHERE username LIKE ?";
+            }
+            $sql .= " ORDER BY id ASC";
+            
+            if (!empty($keyword)) {
+                $searchParam = "%" . $keyword . "%";
+                $stmt = $this->executePrepared($sql, "s", $searchParam);
+                $result = $stmt->get_result();
+            } else {
+                $result = $this->executeQuery($sql);
+            }
             $list = [];
             while ($row = $result->fetch_assoc()) {
                 $list[] = $this->mapRow($row);

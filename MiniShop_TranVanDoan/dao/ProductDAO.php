@@ -11,19 +11,39 @@ class ProductDAO extends BaseDAO
 
     private function mapRow($row)
     {
-        return new Product(
+        $product = new Product(
             $row['id'], $row['category_id'], $row['brand_id'],
             $row['name'], $row['slug'], $row['old_price'], $row['sale_price'],
             $row['quantity'], $row['description'], $row['image'],
             $row['status'], $row['created_at'], $row['updated_at']
         );
+        $product->cateName = $row['cateName'] ?? '';
+        $product->brandName = $row['brandName'] ?? '';
+        return $product;
     }
 
-    public function getAll()
+    public function getAll($keyword = "")
     {
         try {
-            $sql = "SELECT * FROM products ORDER BY id ASC";
-            $result = $this->executeQuery($sql);
+            $sql = "SELECT p.*, c.name as cateName, b.name as brandName 
+                    FROM products p 
+                    INNER JOIN categories c ON p.category_id = c.id 
+                    INNER JOIN brands b ON p.brand_id = b.id";
+            $keyword = trim($keyword);
+            
+            if (!empty($keyword)) {
+                $sql .= " WHERE p.name LIKE ? OR c.name LIKE ? OR b.name LIKE ?";
+            }
+            $sql .= " ORDER BY p.id ASC";
+            
+            if (!empty($keyword)) {
+                $searchParam = "%" . $keyword . "%";
+                $stmt = $this->executePrepared($sql, "sss", $searchParam, $searchParam, $searchParam);
+                $result = $stmt->get_result();
+            } else {
+                $result = $this->executeQuery($sql);
+            }
+            
             $list = [];
             while ($row = $result->fetch_assoc()) {
                 $list[] = $this->mapRow($row);
@@ -37,7 +57,11 @@ class ProductDAO extends BaseDAO
     public function findById($id)
     {
         try {
-            $sql = "SELECT * FROM products WHERE id = ?";
+            $sql = "SELECT p.*, c.name as cateName, b.name as brandName 
+                    FROM products p 
+                    INNER JOIN categories c ON p.category_id = c.id 
+                    INNER JOIN brands b ON p.brand_id = b.id 
+                    WHERE p.id = ?";
             $stmt = $this->executePrepared($sql, "i", $id);
             $result = $stmt->get_result();
             if ($row = $result->fetch_assoc()) {

@@ -11,14 +11,50 @@ class OrderDAO extends BaseDAO
 
     private function mapRow($row)
     {
-        return new Order($row['id'], $row['customer_id'], $row['total_amount'], $row['status'], $row['note'], $row['created_at'], $row['updated_at']);
+        $order = new Order($row['id'], $row['customer_id'], $row['total_amount'], $row['status'], $row['note'], $row['created_at'], $row['updated_at']);
+        $order->customerName = $row['customer_name'] ?? '';
+        return $order;
     }
 
-    public function getAll()
+    public function getAll($keyword = "", $status = "")
     {
         try {
-            $sql = "SELECT * FROM orders ORDER BY id DESC";
-            $result = $this->executeQuery($sql);
+            $sql = "SELECT o.*, c.fullname as customer_name 
+                    FROM orders o 
+                    LEFT JOIN customers c ON o.customer_id = c.id";
+            
+            $conditions = [];
+            $params = [];
+            $types = "";
+
+            $keyword = trim($keyword);
+            if (!empty($keyword)) {
+                $conditions[] = "(o.id LIKE ? OR c.fullname LIKE ?)";
+                $searchParam = "%" . $keyword . "%";
+                $params[] = $searchParam;
+                $params[] = $searchParam;
+                $types .= "ss";
+            }
+            
+            if ($status !== "") {
+                $conditions[] = "o.status = ?";
+                $params[] = $status;
+                $types .= "i";
+            }
+            
+            if (count($conditions) > 0) {
+                $sql .= " WHERE " . implode(" AND ", $conditions);
+            }
+            
+            $sql .= " ORDER BY o.id DESC";
+            
+            if (count($params) > 0) {
+                $stmt = $this->executePrepared($sql, $types, ...$params);
+                $result = $stmt->get_result();
+            } else {
+                $result = $this->executeQuery($sql);
+            }
+
             $list = [];
             while ($row = $result->fetch_assoc()) {
                 $list[] = $this->mapRow($row);
@@ -32,7 +68,10 @@ class OrderDAO extends BaseDAO
     public function findById($id)
     {
         try {
-            $sql = "SELECT * FROM orders WHERE id = ?";
+            $sql = "SELECT o.*, c.fullname as customer_name 
+                    FROM orders o 
+                    LEFT JOIN customers c ON o.customer_id = c.id 
+                    WHERE o.id = ?";
             $stmt = $this->executePrepared($sql, "i", $id);
             $result = $stmt->get_result();
             if ($row = $result->fetch_assoc()) {
@@ -48,7 +87,7 @@ class OrderDAO extends BaseDAO
     {
         try {
             $sql = "INSERT INTO orders (customer_id, total_amount, status, note) VALUES (?, ?, ?, ?)";
-            $stmt = $this->executePrepared($sql, "idss", $o->customerId, $o->totalAmount, $o->status, $o->note);
+            $stmt = $this->executePrepared($sql, "idis", $o->customerId, $o->totalAmount, $o->status, $o->note);
             return $stmt->affected_rows > 0;
         } catch (Exception $e) {
             return false;
@@ -59,7 +98,7 @@ class OrderDAO extends BaseDAO
     {
         try {
             $sql = "UPDATE orders SET customer_id = ?, total_amount = ?, status = ?, note = ? WHERE id = ?";
-            $stmt = $this->executePrepared($sql, "idssi", $o->customerId, $o->totalAmount, $o->status, $o->note, $o->id);
+            $stmt = $this->executePrepared($sql, "idisi", $o->customerId, $o->totalAmount, $o->status, $o->note, $o->id);
             return $stmt->affected_rows >= 0;
         } catch (Exception $e) {
             return false;
@@ -69,6 +108,17 @@ class OrderDAO extends BaseDAO
     public function delete($id)
     {
         return $this->deleteById($id);
+    }
+    
+    public function updateStatus($id, $status)
+    {
+        try {
+            $sql = "UPDATE orders SET status = ? WHERE id = ?";
+            $stmt = $this->executePrepared($sql, "ii", $status, $id);
+            return $stmt->affected_rows >= 0;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     // Dashboard: 5 đơn hàng mới nhất
@@ -80,9 +130,7 @@ class OrderDAO extends BaseDAO
             $result = $stmt->get_result();
             $list = [];
             while ($row = $result->fetch_assoc()) {
-                $order = $this->mapRow($row);
-                $order->customerName = $row['customer_name'] ?? '';
-                $list[] = $order;
+                $list[] = $this->mapRow($row);
             }
             return $list;
         } catch (Exception $e) {
