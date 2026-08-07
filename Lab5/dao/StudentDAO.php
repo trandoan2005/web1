@@ -14,7 +14,7 @@ class StudentDAO
 
     // Lấy danh sách tất cả sinh viên
     public function getAll()
-    {
+    {6
         $sql = "SELECT * FROM students ORDER BY id ASC";
         $result = $this->conn->query($sql);
 
