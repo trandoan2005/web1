@@ -60,7 +60,6 @@ ob_start();
                 <th>STT</th>
                 <th>Logo</th>
                 <th>Tên thương hiệu</th>
-                <th>Mô tả</th>
                 <th>Trạng thái</th>
                 <th>Ngày tạo</th>
                 <th>Chức năng</th>
@@ -77,8 +76,7 @@ ob_start();
                             <span class="text-muted">No Image</span>
                         <?php } ?>
                     </td>
-                    <td class="fw-bold text-primary"><?= htmlspecialchars($brand->name) ?></td>
-                    <td><?= htmlspecialchars($brand->description) ?></td>
+                    <td class="fw-bold text-primary"><?= htmlspecialchars($brand->name ?? '') ?></td>
                     <td>
                         <span class="badge <?= $brand->status ? 'bg-success' : 'bg-secondary' ?>">
                             <?= $brand->status ? 'Hiện' : 'Ẩn' ?>

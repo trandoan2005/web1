@@ -17,15 +17,11 @@ if (!$brandOld) {
 
 $errors = [];
 $name = $brandOld->name;
-$slug = $brandOld->slug;
-$description = $brandOld->description;
 $status = $brandOld->status;
-$image = $brandOld->logo; // Using 'logo' for brands
+$image = $brandOld->logo;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = trim($_POST["name"] ?? "");
-    $slug = trim($_POST["slug"] ?? "");
-    $description = trim($_POST["description"] ?? "");
     $status = (int)($_POST["status"] ?? 1);
 
     $fileName = $_FILES["image"]["name"] ?? "";
@@ -58,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($errors)) {
         if ($fileName != "") {
             $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-            $image = time() . "_" . $slug . "." . $extension;
+            $image = time() . "_" . rand(1000, 9999) . "." . $extension;
             $uploadPath = __DIR__ . "/../../../uploads/brands/" . $image;
 
             // Xóa hình cũ
@@ -72,8 +68,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         $brandOld->name = $name;
-        $brandOld->slug = $slug;
-        $brandOld->description = $description;
         $brandOld->status = $status;
         $brandOld->logo = $image;
 
@@ -109,11 +103,6 @@ ob_start();
                 <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($name) ?>">
             </div>
             
-            <div class="mb-3">
-                <label class="form-label fw-bold">Slug</label>
-                <input type="text" name="slug" class="form-control" value="<?= htmlspecialchars($slug) ?>">
-            </div>
-            
             <div class="text-center mb-3" id="preview">
                 <?php if ($image != "") { ?>
                     <img src="../../../uploads/brands/<?= htmlspecialchars($image) ?>" class="img-thumbnail" width="200">
@@ -125,11 +114,6 @@ ob_start();
                 <div class="form-text">Bỏ trống nếu không muốn thay đổi logo hiện tại.</div>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label fw-bold">Mô tả</label>
-                <textarea name="description" rows="3" class="form-control"><?= htmlspecialchars($description) ?></textarea>
-            </div>
-            
             <div class="mb-3">
                 <label class="form-label fw-bold d-block">Trạng thái</label>
                 <div class="form-check form-check-inline">
