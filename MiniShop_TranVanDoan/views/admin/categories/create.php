@@ -4,12 +4,11 @@ require_once __DIR__ . '/../../../dao/CategoryDAO.php';
 $categoryDAO = new CategoryDAO();
 
 $errors = [];
-$name = $slug = $description = "";
+$name = $description = "";
 $status = 1;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = trim($_POST["name"] ?? "");
-    $slug = trim($_POST["slug"] ?? "");
     $description = trim($_POST["description"] ?? "");
     $status = (int)($_POST["status"] ?? 1);
 
@@ -43,12 +42,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($errors)) {
         if ($fileName != "") {
             $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-            $image = time() . "_" . $slug . "." . $extension;
+            $image = time() . "_" . rand(1000, 9999) . "." . $extension;
             $uploadPath = __DIR__ . "/../../../uploads/categories/" . $image;
             move_uploaded_file($tmpName, $uploadPath);
         }
 
-        $c = new Category(0, $name, $slug, $description, $status, $image);
+        $c = new Category(0, $name, $description, $image, $status);
         if ($categoryDAO->insert($c)) {
             header("Location: index.php");
             exit;
@@ -79,11 +78,6 @@ ob_start();
             <div class="mb-3">
                 <label class="form-label fw-bold">Tên danh mục <span class="text-danger">*</span></label>
                 <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($name) ?>">
-            </div>
-            
-            <div class="mb-3">
-                <label class="form-label fw-bold">Slug</label>
-                <input type="text" name="slug" class="form-control" value="<?= htmlspecialchars($slug) ?>">
             </div>
             
             <div class="text-center mb-3" id="preview">

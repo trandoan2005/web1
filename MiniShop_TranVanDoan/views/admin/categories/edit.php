@@ -8,28 +8,26 @@ if (!isset($_GET['id'])) {
     exit;
 }
 $id = (int)$_GET['id'];
-$categoryOld = $categoryDAO->findById($id);
+$catOld = $categoryDAO->findById($id);
 
-if (!$categoryOld) {
+if (!$catOld) {
     header("Location: index.php");
     exit;
 }
 
 $errors = [];
-$name = $categoryOld->name;
-$slug = $categoryOld->slug;
-$description = $categoryOld->description;
-$status = $categoryOld->status;
-$image = $categoryOld->image;
+$name = $catOld->name;
+$description = $catOld->description;
+$status = $catOld->status;
+$image = $catOld->image;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = trim($_POST["name"] ?? "");
-    $slug = trim($_POST["slug"] ?? "");
     $description = trim($_POST["description"] ?? "");
     $status = (int)($_POST["status"] ?? 1);
 
     $fileName = $_FILES["image"]["name"] ?? "";
-    $image = $categoryOld->image; // Giữ nguyên hình cũ
+    $image = $catOld->image; // Giữ nguyên hình cũ
 
     if ($name === "") {
         $errors[] = "Tên danh mục không được để trống.";
@@ -56,15 +54,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($errors)) {
-        // Có chọn hình mới
         if ($fileName != "") {
             $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-            $image = time() . "_" . $slug . "." . $extension;
+            $image = time() . "_" . rand(1000, 9999) . "." . $extension;
             $uploadPath = __DIR__ . "/../../../uploads/categories/" . $image;
 
             // Xóa hình cũ
-            if (!empty($categoryOld->image)) {
-                $oldImage = __DIR__ . "/../../../uploads/categories/" . $categoryOld->image;
+            if (!empty($catOld->image)) {
+                $oldImage = __DIR__ . "/../../../uploads/categories/" . $catOld->image;
                 if (file_exists($oldImage)) {
                     unlink($oldImage);
                 }
@@ -72,13 +69,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             move_uploaded_file($tmpName, $uploadPath);
         }
 
-        $categoryOld->name = $name;
-        $categoryOld->slug = $slug;
-        $categoryOld->description = $description;
-        $categoryOld->status = $status;
-        $categoryOld->image = $image;
+        $catOld->name = $name;
+        $catOld->description = $description;
+        $catOld->image = $image;
+        $catOld->status = $status;
 
-        if ($categoryDAO->update($categoryOld)) {
+        if ($categoryDAO->update($catOld)) {
             header("Location: index.php");
             exit;
         } else {
@@ -110,18 +106,13 @@ ob_start();
                 <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($name) ?>">
             </div>
             
-            <div class="mb-3">
-                <label class="form-label fw-bold">Slug</label>
-                <input type="text" name="slug" class="form-control" value="<?= htmlspecialchars($slug) ?>">
-            </div>
-            
             <div class="text-center mb-3" id="preview">
                 <?php if ($image != "") { ?>
                     <img src="../../../uploads/categories/<?= htmlspecialchars($image) ?>" class="img-thumbnail" width="200">
                 <?php } ?>
             </div>
             <div class="mb-3">
-                <label class="form-label">Hình đại diện mới</label>
+                <label class="form-label">Hình ảnh mới</label>
                 <input type="file" id="image" name="image" class="form-control" accept="image/*">
                 <div class="form-text">Bỏ trống nếu không muốn thay đổi hình ảnh hiện tại.</div>
             </div>
