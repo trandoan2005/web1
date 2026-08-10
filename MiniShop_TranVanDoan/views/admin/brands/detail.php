@@ -33,8 +33,14 @@ ob_start();
                     <td class="fw-bold text-primary"><?= htmlspecialchars($obj->name) ?></td>
                 </tr>
                 <tr>
-                    <th class="table-light">Logo (Tên file)</th>
-                    <td class="fw-bold text-primary"><?= htmlspecialchars($obj->logo) ?></td>
+                    <th class="table-light">Logo</th>
+                    <td>
+                        <?php if ($obj->logo != "") { ?>
+                            <img src="../../../uploads/brands/<?= htmlspecialchars($obj->logo) ?>" class="img-thumbnail" width="150">
+                        <?php } else { ?>
+                            <span class="text-muted">No Image</span>
+                        <?php } ?>
+                    </td>
                 </tr>
                 <tr>
                     <th class="table-light">Trạng thái</th>

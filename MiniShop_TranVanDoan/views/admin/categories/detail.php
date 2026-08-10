@@ -33,6 +33,16 @@ ob_start();
                     <td class="fw-bold text-primary"><?= htmlspecialchars($category->name) ?></td>
                 </tr>
                 <tr>
+                    <th class="table-light">Hình ảnh</th>
+                    <td>
+                        <?php if ($category->image != "") { ?>
+                            <img src="../../../uploads/categories/<?= htmlspecialchars($category->image) ?>" class="img-thumbnail" width="150">
+                        <?php } else { ?>
+                            <span class="text-muted">No Image</span>
+                        <?php } ?>
+                    </td>
+                </tr>
+                <tr>
                     <th class="table-light">Mô tả</th>
                     <td><?= nl2br(htmlspecialchars($category->description)) ?></td>
                 </tr>

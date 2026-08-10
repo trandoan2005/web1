@@ -8,37 +8,76 @@ if (!isset($_GET['id'])) {
     exit;
 }
 $id = (int)$_GET['id'];
-$obj = $brandDAO->findById($id);
+$brandOld = $brandDAO->findById($id);
 
-if (!$obj) {
+if (!$brandOld) {
     header("Location: index.php");
     exit;
 }
 
 $errors = [];
-$name = $obj->name;
-$logo = $obj->logo;
-
-$status = $obj->status;
+$name = $brandOld->name;
+$slug = $brandOld->slug;
+$description = $brandOld->description;
+$status = $brandOld->status;
+$image = $brandOld->logo; // Using 'logo' for brands
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = trim($_POST["name"] ?? "");
-    $logo = trim($_POST["logo"] ?? "");
+    $slug = trim($_POST["slug"] ?? "");
+    $description = trim($_POST["description"] ?? "");
+    $status = (int)($_POST["status"] ?? 1);
 
-    $status = $_POST["status"] ?? 1;
+    $fileName = $_FILES["image"]["name"] ?? "";
+    $image = $brandOld->logo; // Giữ nguyên hình cũ
 
-    // Validation
-    if ($name === "") { $errors[] = "Tên thương hiệu không được để trống."; }
-    if ($logo === "") { $errors[] = "Logo (Tên file) không được để trống."; }
+    if ($name === "") {
+        $errors[] = "Tên thương hiệu không được để trống.";
+    }
 
+    $tmpName = "";
+    if ($fileName != "") {
+        $fileSize = $_FILES["image"]["size"] ?? 0;
+        $error = $_FILES["image"]["error"] ?? 0;
+        $tmpName = $_FILES["image"]["tmp_name"] ?? "";
+
+        if ($error != UPLOAD_ERR_OK) {
+            $errors[] = "Upload hình ảnh không thành công.";
+        }
+        $allowExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+        $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        if (!in_array($extension, $allowExtensions)) {
+            $errors[] = "Chỉ cho phép file JPG, JPEG, PNG hoặc WEBP.";
+        }
+        $maxSize = 200 * 1024;
+        if ($fileSize > $maxSize) {
+            $errors[] = "Kích thước hình ảnh <= 200 KB.";
+        }
+    }
 
     if (empty($errors)) {
-        $obj->name = $name;
-        $obj->logo = $logo;
+        if ($fileName != "") {
+            $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+            $image = time() . "_" . $slug . "." . $extension;
+            $uploadPath = __DIR__ . "/../../../uploads/brands/" . $image;
 
-        $obj->status = $status;
-        
-        if ($brandDAO->update($obj)) {
+            // Xóa hình cũ
+            if (!empty($brandOld->logo)) {
+                $oldImage = __DIR__ . "/../../../uploads/brands/" . $brandOld->logo;
+                if (file_exists($oldImage)) {
+                    unlink($oldImage);
+                }
+            }
+            move_uploaded_file($tmpName, $uploadPath);
+        }
+
+        $brandOld->name = $name;
+        $brandOld->slug = $slug;
+        $brandOld->description = $description;
+        $brandOld->status = $status;
+        $brandOld->logo = $image;
+
+        if ($brandDAO->update($brandOld)) {
             header("Location: index.php");
             exit;
         } else {
@@ -49,48 +88,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ob_start();
 ?>
-<div class="card shadow-sm">
+<div class="card shadow-sm" style="max-width: 600px; margin: 0 auto;">
     <div class="card-header bg-warning text-dark">
-        <h5 class="mb-0">Cập nhật thương hiệu</h5>
+        <h5 class="mb-0"><i class="bi bi-pencil"></i> Cập nhật Thương hiệu</h5>
     </div>
     <div class="card-body">
-        <?php if (!empty($errors)): ?>
+        <?php if (!empty($errors)) { ?>
             <div class="alert alert-danger">
                 <ul class="mb-0">
-                    <?php foreach ($errors as $err): ?>
-                        <li><?= $err ?></li>
-                    <?php endforeach; ?>
+                    <?php foreach ($errors as $error) { ?>
+                        <li><?= $error ?></li>
+                    <?php } ?>
                 </ul>
             </div>
-        <?php endif; ?>
+        <?php } ?>
 
-        <form method="POST">
-            <input type="hidden" name="id" value="<?= $obj->id ?>">
+        <form method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label fw-bold">Tên thương hiệu <span class="text-danger">*</span></label>
                 <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($name) ?>">
             </div>
+            
             <div class="mb-3">
-                <label class="form-label fw-bold">Logo (Tên file) <span class="text-danger">*</span></label>
-                <input type="text" name="logo" class="form-control" value="<?= htmlspecialchars($logo) ?>">
+                <label class="form-label fw-bold">Slug</label>
+                <input type="text" name="slug" class="form-control" value="<?= htmlspecialchars($slug) ?>">
+            </div>
+            
+            <div class="text-center mb-3" id="preview">
+                <?php if ($image != "") { ?>
+                    <img src="../../../uploads/brands/<?= htmlspecialchars($image) ?>" class="img-thumbnail" width="200">
+                <?php } ?>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold">Logo (Hình ảnh) mới</label>
+                <input type="file" id="image" name="image" class="form-control" accept="image/*">
+                <div class="form-text">Bỏ trống nếu không muốn thay đổi logo hiện tại.</div>
             </div>
 
             <div class="mb-3">
+                <label class="form-label fw-bold">Mô tả</label>
+                <textarea name="description" rows="3" class="form-control"><?= htmlspecialchars($description) ?></textarea>
+            </div>
+            
+            <div class="mb-3">
                 <label class="form-label fw-bold d-block">Trạng thái</label>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="status" value="1" <?= $status == 1 ? "checked" : "" ?>>
-                    <label class="form-check-label">Hiển thị (Hoạt động)</label>
+                    <input class="form-check-input" type="radio" name="status" value="1" <?= $status == 1 ? 'checked' : '' ?>>
+                    <label class="form-check-label">Hoạt động</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="status" value="0" <?= $status == 0 ? "checked" : "" ?>>
-                    <label class="form-check-label">Ẩn (Ngừng hoạt động)</label>
+                    <input class="form-check-input" type="radio" name="status" value="0" <?= $status == 0 ? 'checked' : '' ?>>
+                    <label class="form-check-label">Khóa</label>
                 </div>
             </div>
             
             <hr>
-            <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Cập nhật</button>
-            <button type="reset" class="btn btn-warning"><i class="bi bi-arrow-counterclockwise"></i> Làm mới</button>
-            <a href="index.php" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save"></i> Cập nhật</button>
+                <button type="reset" class="btn btn-warning px-4"><i class="bi bi-arrow-counterclockwise"></i> Làm mới</button>
+                <a href="index.php" class="btn btn-secondary px-4"><i class="bi bi-arrow-left"></i> Quay lại</a>
+            </div>
         </form>
     </div>
 </div>

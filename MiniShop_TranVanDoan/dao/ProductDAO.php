@@ -116,5 +116,43 @@ class ProductDAO extends BaseDAO
             return [];
         }
     }
+
+    // Hàm thêm hình ảnh gallery
+    public function insertImage($productId, $imageName) {
+        try {
+            $sql = "INSERT INTO product_images (product_id, image) VALUES (?, ?)";
+            $stmt = $this->executePrepared($sql, "is", $productId, $imageName);
+            return $stmt->affected_rows > 0;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    // Lấy danh sách gallery theo ID sản phẩm
+    public function getImagesByProductId($productId) {
+        try {
+            $sql = "SELECT * FROM product_images WHERE product_id = ?";
+            $stmt = $this->executePrepared($sql, "i", $productId);
+            $result = $stmt->get_result();
+            $list = [];
+            while ($row = $result->fetch_assoc()) {
+                $list[] = $row;
+            }
+            return $list;
+        } catch (Exception $e) {
+            return [];
+        }
+    }
+
+    // Xóa hình ảnh theo ID 
+    public function deleteImage($id) {
+        try {
+            $sql = "DELETE FROM product_images WHERE id = ?";
+            $stmt = $this->executePrepared($sql, "i", $id);
+            return $stmt->affected_rows > 0;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }
 ?>

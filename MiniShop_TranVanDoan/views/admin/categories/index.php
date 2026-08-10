@@ -58,6 +58,7 @@ ob_start();
         <thead class="table-dark">
             <tr>
                 <th>STT</th>
+                <th>Hình ảnh</th>
                 <th>Tên danh mục</th>
                 <th>Mô tả</th>
                 <th>Trạng thái</th>
@@ -69,14 +70,21 @@ ob_start();
             <?php foreach ($categories as $index => $cat): ?>
                 <tr>
                     <td><?= $index + 1 ?></td>
-                    <td><?= htmlspecialchars($cat->name) ?></td>
+                    <td>
+                        <?php if ($cat->image != "") { ?>
+                            <img src="../../../uploads/categories/<?= htmlspecialchars($cat->image) ?>" alt="<?= htmlspecialchars($cat->name) ?>" class="img-thumbnail" width="80">
+                        <?php } else { ?>
+                            <span class="text-muted">No Image</span>
+                        <?php } ?>
+                    </td>
+                    <td class="fw-bold text-primary"><?= htmlspecialchars($cat->name) ?></td>
                     <td><?= htmlspecialchars($cat->description) ?></td>
                     <td>
                         <span class="badge <?= $cat->status ? 'bg-success' : 'bg-secondary' ?>">
                             <?= $cat->status ? 'Hiện' : 'Ẩn' ?>
                         </span>
                     </td>
-                    <td><?= $cat->createdAt ?></td>
+                    <td><?= date('d/m/Y', strtotime($cat->createdAt)) ?></td>
                     <td>
                         <a href="detail.php?id=<?= $cat->id ?>" class="btn btn-sm btn-info text-white"><i class="bi bi-eye"></i></a>
                         <a href="edit.php?id=<?= $cat->id ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>

@@ -28,10 +28,11 @@ ob_start();
     <div class="alert alert-danger"><?= $error ?></div>
 <?php endif; ?>
 <?php if (isset($_GET['msg']) && $_GET['msg'] == 'deleted'): ?>
-    <div class="alert alert-success">Đã xóa thành công!</div>
+    <div class="alert alert-success">Đã xóa thương hiệu thành công!</div>
 <?php endif; ?>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
+    <!-- Form tìm kiếm -->
     <form class="row gx-2 align-items-center" method="GET">
         <div class="col-auto">
             <input type="text" name="keyword" class="form-control" placeholder="Nhập từ khóa..." value="<?= htmlspecialchars($keyword) ?>">
@@ -46,6 +47,7 @@ ob_start();
         <?php endif; ?>
     </form>
     
+    <!-- Nút thêm mới -->
     <a href="create.php" class="btn btn-success"><i class="bi bi-plus-lg"></i> Thêm mới</a>
 </div>
 
@@ -56,10 +58,11 @@ ob_start();
         <thead class="table-dark">
             <tr>
                 <th>STT</th>
+                <th>Logo</th>
                 <th>Tên thương hiệu</th>
-                <th>Logo (Tên file)</th>
-
+                <th>Mô tả</th>
                 <th>Trạng thái</th>
+                <th>Ngày tạo</th>
                 <th>Chức năng</th>
             </tr>
         </thead>
@@ -67,14 +70,21 @@ ob_start();
             <?php foreach ($brands as $index => $brand): ?>
                 <tr>
                     <td><?= $index + 1 ?></td>
-                    <td><?= htmlspecialchars($brand->name) ?></td>
-                    <td><?= htmlspecialchars($brand->logo) ?></td>
-
+                    <td>
+                        <?php if ($brand->logo != "") { ?>
+                            <img src="../../../uploads/brands/<?= htmlspecialchars($brand->logo) ?>" alt="<?= htmlspecialchars($brand->name) ?>" class="img-thumbnail" width="80">
+                        <?php } else { ?>
+                            <span class="text-muted">No Image</span>
+                        <?php } ?>
+                    </td>
+                    <td class="fw-bold text-primary"><?= htmlspecialchars($brand->name) ?></td>
+                    <td><?= htmlspecialchars($brand->description) ?></td>
                     <td>
                         <span class="badge <?= $brand->status ? 'bg-success' : 'bg-secondary' ?>">
-                            <?= $brand->status ? 'Hoạt động' : 'Khóa' ?>
+                            <?= $brand->status ? 'Hiện' : 'Ẩn' ?>
                         </span>
                     </td>
+                    <td><?= date('d/m/Y', strtotime($brand->createdAt)) ?></td>
                     <td>
                         <a href="detail.php?id=<?= $brand->id ?>" class="btn btn-sm btn-info text-white"><i class="bi bi-eye"></i></a>
                         <a href="edit.php?id=<?= $brand->id ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>

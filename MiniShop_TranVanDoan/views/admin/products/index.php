@@ -52,39 +52,47 @@ ob_start();
 <?php if (empty($products)): ?>
     <div class="alert alert-warning">Không tìm thấy dữ liệu.</div>
 <?php else: ?>
-    <table class="table table-bordered table-striped table-hover align-middle">
-        <thead class="table-dark text-center">
+    <table class="table table-bordered table-striped table-hover align-middle text-center">
+        <thead class="table-dark">
             <tr>
                 <th>STT</th>
+                <th>Hình ảnh</th>
                 <th>Tên sản phẩm</th>
                 <th>Danh mục</th>
                 <th>Thương hiệu</th>
                 <th>Giá bán</th>
-                <th>Tồn kho</th>
+                <th>Kho</th>
                 <th>Trạng thái</th>
                 <th>Chức năng</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($products as $index => $p): ?>
+            <?php foreach ($products as $index => $item): ?>
                 <tr>
-                    <td class="text-center"><?= $index + 1 ?></td>
-                    <td><?= htmlspecialchars($p->name) ?></td>
-                    <td><?= htmlspecialchars($p->cateName) ?></td>
-                    <td><?= htmlspecialchars($p->brandName) ?></td>
-                    <td class="text-danger fw-bold text-end"><?= number_format($p->salePrice, 0, ',', '.') ?> đ</td>
-                    <td class="text-center"><?= $p->quantity ?></td>
-                    <td class="text-center">
-                        <span class="badge <?= $p->status ? 'bg-success' : 'bg-secondary' ?>">
-                            <?= $p->status ? 'Hiện' : 'Ẩn' ?>
+                    <td><?= $index + 1 ?></td>
+                    <td>
+                        <?php if ($item->image != "") { ?>
+                            <img src="../../../uploads/products/<?= htmlspecialchars($item->image) ?>" alt="<?= htmlspecialchars($item->name) ?>" class="img-thumbnail" width="80">
+                        <?php } else { ?>
+                            <span class="text-muted">No Image</span>
+                        <?php } ?>
+                    </td>
+                    <td class="text-start fw-bold"><?= htmlspecialchars($item->name) ?></td>
+                    <td><?= htmlspecialchars($item->cateName) ?></td>
+                    <td><?= htmlspecialchars($item->brandName) ?></td>
+                    <td class="text-danger fw-bold text-end"><?= number_format($item->salePrice, 0, ',', '.') ?> đ</td>
+                    <td><?= $item->quantity ?></td>
+                    <td>
+                        <span class="badge <?= $item->status ? 'bg-success' : 'bg-secondary' ?>">
+                            <?= $item->status ? 'Hiện' : 'Ẩn' ?>
                         </span>
                     </td>
-                    <td class="text-center">
-                        <a href="detail.php?id=<?= $p->id ?>" class="btn btn-sm btn-info text-white"><i class="bi bi-eye"></i></a>
-                        <a href="edit.php?id=<?= $p->id ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
+                    <td>
+                        <a href="detail.php?id=<?= $item->id ?>" class="btn btn-sm btn-info text-white" title="Chi tiết"><i class="bi bi-eye"></i></a>
+                        <a href="edit.php?id=<?= $item->id ?>" class="btn btn-sm btn-warning" title="Sửa"><i class="bi bi-pencil"></i></a>
                         <form method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa?');" class="d-inline">
-                            <input type="hidden" name="id" value="<?= $p->id ?>">
-                            <button type="submit" name="btnDelete" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                            <input type="hidden" name="id" value="<?= $item->id ?>">
+                            <button type="submit" name="btnDelete" class="btn btn-sm btn-danger" title="Xóa"><i class="bi bi-trash"></i></button>
                         </form>
                     </td>
                 </tr>

@@ -13,27 +13,44 @@ if (!isset($_GET['id'])) {
     exit;
 }
 $id = (int)$_GET['id'];
-$product = $productDAO->findById($id);
+$productOld = $productDAO->findById($id);
 
-if (!$product) {
+if (!$productOld) {
     header("Location: index.php");
     exit;
 }
 
+// Code xử lý XÓA hình ảnh trong Gallery (nếu có)
+if (isset($_GET['delete_image_id'])) {
+    $imgId = (int)$_GET['delete_image_id'];
+    $imgName = $_GET['image_name'];
+    
+    if ($productDAO->deleteImage($imgId)) {
+        // Xóa file vật lý
+        $filePath = __DIR__ . "/../../../uploads/products/" . $imgName;
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+        header("Location: edit.php?id=$id&msg=img_deleted");
+        exit;
+    }
+}
+
 $categories = $categoryDAO->getAll();
 $brands = $brandDAO->getAll();
+$galleryImages = $productDAO->getImagesByProductId($id);
 
 $errors = [];
-$name = $product->name;
-$slug = $product->slug;
-$categoryId = $product->categoryId;
-$brandId = $product->brandId;
-$oldPrice = $product->oldPrice;
-$salePrice = $product->salePrice;
-$quantity = $product->quantity;
-$description = $product->description;
-$image = $product->image;
-$status = $product->status;
+$name = $productOld->name;
+$slug = $productOld->slug;
+$categoryId = $productOld->categoryId;
+$brandId = $productOld->brandId;
+$oldPrice = $productOld->oldPrice;
+$salePrice = $productOld->salePrice;
+$quantity = $productOld->quantity;
+$description = $productOld->description;
+$status = $productOld->status;
+$image = $productOld->image;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = trim($_POST["name"] ?? "");
@@ -44,8 +61,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $salePrice = (float)($_POST["salePrice"] ?? 0);
     $quantity = (int)($_POST["quantity"] ?? 0);
     $description = trim($_POST["description"] ?? "");
-    $image = trim($_POST["image"] ?? "");
     $status = (int)($_POST["status"] ?? 1);
+
+    $fileName = $_FILES["image"]["name"] ?? "";
+    $image = $productOld->image; // Giữ nguyên hình cũ
 
     // Validation
     if ($name === "") $errors[] = "Tên sản phẩm không được để trống.";
@@ -54,19 +73,75 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($salePrice <= 0) $errors[] = "Giá bán phải lớn hơn 0.";
     if ($quantity < 0) $errors[] = "Số lượng không hợp lệ.";
 
+    $tmpName = "";
+    if ($fileName != "") {
+        $fileSize = $_FILES["image"]["size"] ?? 0;
+        $error = $_FILES["image"]["error"] ?? 0;
+        $tmpName = $_FILES["image"]["tmp_name"] ?? "";
+
+        if ($error != UPLOAD_ERR_OK) {
+            $errors[] = "Upload hình ảnh đại diện không thành công.";
+        }
+        $allowExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+        $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        if (!in_array($extension, $allowExtensions)) {
+            $errors[] = "Ảnh đại diện: Chỉ cho phép file JPG, JPEG, PNG hoặc WEBP.";
+        }
+        $maxSize = 200 * 1024;
+        if ($fileSize > $maxSize) {
+            $errors[] = "Ảnh đại diện: Kích thước <= 200 KB.";
+        }
+    }
+
     if (empty($errors)) {
-        $product->name = $name;
-        $product->slug = $slug;
-        $product->categoryId = $categoryId;
-        $product->brandId = $brandId;
-        $product->oldPrice = $oldPrice;
-        $product->salePrice = $salePrice;
-        $product->quantity = $quantity;
-        $product->description = $description;
-        $product->image = $image;
-        $product->status = $status;
+        // Có chọn hình ảnh mới
+        if ($fileName != "") {
+            $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+            $image = time() . "_" . $slug . "." . $extension;
+            $uploadPath = __DIR__ . "/../../../uploads/products/" . $image;
+
+            // Xóa hình ảnh cũ (nếu có)
+            if (!empty($productOld->image)) {
+                $oldImage = __DIR__ . "/../../../uploads/products/" . $productOld->image;
+                if (file_exists($oldImage)) {
+                    unlink($oldImage);
+                }
+            }
+            // Upload hình ảnh mới
+            move_uploaded_file($tmpName, $uploadPath);
+        }
+
+        // Upload nhiều hình ảnh (Gallery)
+        $images = $_FILES["images"] ?? null;
+        if ($images && is_array($images['name'])) {
+            for ($i = 0; $i < count($images['name']); $i++) {
+                $galFileName = $images['name'][$i];
+                if ($galFileName != "") {
+                    $galTmpName = $images['tmp_name'][$i];
+                    $ext = strtolower(pathinfo($galFileName, PATHINFO_EXTENSION));
+                    if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                        $newImageName = time() . "_" . rand(100, 999) . "." . $ext;
+                        $galUploadPath = __DIR__ . "/../../../uploads/products/" . $newImageName;
+                        if (move_uploaded_file($galTmpName, $galUploadPath)) {
+                            $productDAO->insertImage($id, $newImageName);
+                        }
+                    }
+                }
+            }
+        }
+
+        $productOld->name = $name;
+        $productOld->slug = $slug;
+        $productOld->categoryId = $categoryId;
+        $productOld->brandId = $brandId;
+        $productOld->oldPrice = $oldPrice;
+        $productOld->salePrice = $salePrice;
+        $productOld->quantity = $quantity;
+        $productOld->description = $description;
+        $productOld->image = $image;
+        $productOld->status = $status;
         
-        if ($productDAO->update($product)) {
+        if ($productDAO->update($productOld)) {
             header("Location: index.php");
             exit;
         } else {
@@ -82,18 +157,21 @@ ob_start();
         <h5 class="mb-0">Cập nhật sản phẩm</h5>
     </div>
     <div class="card-body">
-        <?php if (!empty($errors)): ?>
+        <?php if (isset($_GET['msg']) && $_GET['msg'] == 'img_deleted'): ?>
+            <div class="alert alert-success">Đã xóa hình ảnh gallery thành công!</div>
+        <?php endif; ?>
+        <?php if (!empty($errors)) { ?>
             <div class="alert alert-danger">
                 <ul class="mb-0">
-                    <?php foreach ($errors as $err): ?>
-                        <li><?= $err ?></li>
-                    <?php endforeach; ?>
+                    <?php foreach ($errors as $error) { ?>
+                        <li><?= $error ?></li>
+                    <?php } ?>
                 </ul>
             </div>
-        <?php endif; ?>
+        <?php } ?>
 
-        <form method="POST">
-            <input type="hidden" name="id" value="<?= $product->id ?>">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="<?= $productOld->id ?>">
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label fw-bold">Tên sản phẩm <span class="text-danger">*</span></label>
@@ -145,10 +223,41 @@ ob_start();
                 </div>
             </div>
             
-            <div class="mb-3">
-                <label class="form-label fw-bold">Ảnh sản phẩm (Tên file)</label>
-                <input type="text" name="image" class="form-control" value="<?= htmlspecialchars($image) ?>">
+            <div class="text-center mb-3" id="preview">
+                <?php if ($image != "") { ?>
+                    <img src="../../../uploads/products/<?= htmlspecialchars($image) ?>" class="img-thumbnail" width="200">
+                <?php } ?>
             </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold">Hình ảnh đại diện mới</label>
+                <input type="file" id="image" name="image" class="form-control" accept="image/*">
+                <div class="form-text">Bỏ trống nếu không muốn thay đổi hình ảnh hiện tại.</div>
+            </div>
+
+            <hr>
+            <!-- Hiển thị Gallery hiện tại -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Gallery hiện tại</label>
+                <?php if (!empty($galleryImages)): ?>
+                    <div class="d-flex flex-wrap gap-3">
+                        <?php foreach ($galleryImages as $img): ?>
+                            <div class="position-relative">
+                                <img src="../../../uploads/products/<?= htmlspecialchars($img['image']) ?>" class="img-thumbnail" width="100">
+                                <a href="edit.php?id=<?= $id ?>&delete_image_id=<?= $img['id'] ?>&image_name=<?= $img['image'] ?>" class="btn btn-sm btn-danger position-absolute top-0 end-0" onclick="return confirm('Xóa hình này?');">X</a>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <div class="text-muted fst-italic">Chưa có hình ảnh nào trong thư viện.</div>
+                <?php endif; ?>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label fw-bold">Thêm hình ảnh Gallery</label>
+                <div class="text-center mb-3 d-flex flex-wrap gap-2 justify-content-center" id="preview-gallery"></div>
+                <input type="file" name="images[]" id="images" class="form-control" accept="image/*" multiple>
+            </div>
+            <hr>
 
             <div class="mb-3">
                 <label class="form-label fw-bold">Mô tả</label>

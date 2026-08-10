@@ -12,7 +12,7 @@ $categories = $categoryDAO->getAll();
 $brands = $brandDAO->getAll();
 
 $errors = [];
-$name = $slug = $description = $image = "";
+$name = $slug = $description = "";
 $categoryId = $brandId = 0;
 $oldPrice = $salePrice = $quantity = 0;
 $status = 1;
@@ -26,8 +26,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $salePrice = (float)($_POST["salePrice"] ?? 0);
     $quantity = (int)($_POST["quantity"] ?? 0);
     $description = trim($_POST["description"] ?? "");
-    $image = trim($_POST["image"] ?? "");
     $status = (int)($_POST["status"] ?? 1);
+
+    $fileName = $_FILES["image"]["name"] ?? "";
+    $image = ""; // gán giá trị tạm thời
 
     // Validation
     if ($name === "") $errors[] = "Tên sản phẩm không được để trống.";
@@ -36,7 +38,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($salePrice <= 0) $errors[] = "Giá bán phải lớn hơn 0.";
     if ($quantity < 0) $errors[] = "Số lượng không hợp lệ.";
 
+    $tmpName = "";
+    if ($fileName != "") {
+        $fileSize = $_FILES["image"]["size"] ?? 0;
+        $error = $_FILES["image"]["error"] ?? 0;
+        $tmpName = $_FILES["image"]["tmp_name"] ?? "";
+
+        if ($error != UPLOAD_ERR_OK) {
+            $errors[] = "Upload hình ảnh không thành công.";
+        }
+        $allowExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+        $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        if (!in_array($extension, $allowExtensions)) {
+            $errors[] = "Chỉ cho phép file JPG, JPEG, PNG hoặc WEBP.";
+        }
+        $maxSize = 200 * 1024;
+        if ($fileSize > $maxSize) {
+            $errors[] = "Kích thước hình ảnh <= 200 KB.";
+        }
+    }
+
+    // Nếu không có lỗi
     if (empty($errors)) {
+        if ($fileName != "") {
+            $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+            $image = time() . "_" . $slug . "." . $extension;
+            $uploadPath = __DIR__ . "/../../../uploads/products/" . $image;
+            move_uploaded_file($tmpName, $uploadPath);
+        }
+
         $p = new Product(0, $categoryId, $brandId, $name, $slug, $oldPrice, $salePrice, $quantity, $description, $image, $status);
         if ($productDAO->insert($p)) {
             header("Location: index.php");
@@ -54,17 +84,17 @@ ob_start();
         <h5 class="mb-0">Thêm mới sản phẩm</h5>
     </div>
     <div class="card-body">
-        <?php if (!empty($errors)): ?>
+        <?php if (!empty($errors)) { ?>
             <div class="alert alert-danger">
                 <ul class="mb-0">
-                    <?php foreach ($errors as $err): ?>
-                        <li><?= $err ?></li>
-                    <?php endforeach; ?>
+                    <?php foreach ($errors as $error) { ?>
+                        <li><?= $error ?></li>
+                    <?php } ?>
                 </ul>
             </div>
-        <?php endif; ?>
+        <?php } ?>
 
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label fw-bold">Tên sản phẩm <span class="text-danger">*</span></label>
@@ -116,9 +146,11 @@ ob_start();
                 </div>
             </div>
             
+            <div class="text-center mb-3" id="preview">
+            </div>
             <div class="mb-3">
-                <label class="form-label fw-bold">Ảnh sản phẩm (Tên file)</label>
-                <input type="text" name="image" class="form-control" value="<?= htmlspecialchars($image) ?>">
+                <label class="form-label">Hình ảnh</label>
+                <input type="file" id="image" name="image" class="form-control" accept="image/*">
             </div>
 
             <div class="mb-3">
@@ -139,7 +171,7 @@ ob_start();
             </div>
             
             <hr>
-            <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Lưu</button>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Lưu sản phẩm</button>
             <button type="reset" class="btn btn-warning"><i class="bi bi-arrow-counterclockwise"></i> Làm mới</button>
             <a href="index.php" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>
         </form>
