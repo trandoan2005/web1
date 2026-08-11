@@ -74,7 +74,7 @@ class BaseDAO extends Database
             $stmt->bind_param("i", $id);
             return $stmt->execute();
         } catch (Exception $e) {
-            die("Lỗi xóa: " . $e->getMessage());
+            return false;
         }
     }
 

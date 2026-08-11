@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btnDelete'])) {
         header("Location: index.php?msg=deleted");
         exit;
     } else {
-        $error = "Xóa thất bại!";
+        $error = "Xóa thất bại! Dữ liệu đang được sử dụng ở nơi khác (ví dụ: đã có trong đơn hàng).";
     }
 }
 

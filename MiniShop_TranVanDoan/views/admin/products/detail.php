@@ -69,7 +69,7 @@ ob_start();
                         </tr>
                         <tr>
                             <th class="table-light">Giá gốc</th>
-                            <td class="text-muted"><del><?= number_format($product->oldPrice, 0, ',', '.') ?> đ</del></td>
+                            <td class="text-muted"><?= number_format($product->oldPrice, 0, ',', '.') ?> đ</td>
                         </tr>
                         <tr>
                             <th class="table-light">Giá bán</th>
