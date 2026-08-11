@@ -57,6 +57,21 @@ class UserDAO extends BaseDAO
         }
     }
 
+    public function findByUsername(string $username): ?User
+    {
+        try {
+            $sql = "SELECT * FROM users WHERE username = ?";
+            $stmt = $this->executePrepared($sql, "s", $username);
+            $result = $stmt->get_result();
+            if ($row = $result->fetch_assoc()) {
+                return $this->mapRow($row);
+            }
+            return null;
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
     public function insert(User $u)
     {
         try {

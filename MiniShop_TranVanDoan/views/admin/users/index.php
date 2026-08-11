@@ -1,6 +1,8 @@
 <?php
 $pageTitle = "Quản lý Nhân viên";
 require_once __DIR__ . '/../../../dao/UserDAO.php';
+require_once __DIR__ . '/../../../middleware/AuthMiddleware.php';
+AuthMiddleware::checkAdmin();
 $userDAO = new UserDAO();
 
 // Xử lý Xóa

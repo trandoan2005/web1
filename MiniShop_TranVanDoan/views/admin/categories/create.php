@@ -1,6 +1,7 @@
 <?php
 $pageTitle = "Thêm Danh mục";
 require_once __DIR__ . '/../../../dao/CategoryDAO.php';
+require_once __DIR__ . '/../../../middleware/CsrfMiddleware.php';
 $categoryDAO = new CategoryDAO();
 
 $errors = [];
@@ -8,6 +9,7 @@ $name = $description = "";
 $status = 1;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    CsrfMiddleware::verify();
     $name = trim($_POST["name"] ?? "");
     $description = trim($_POST["description"] ?? "");
     $status = (int)($_POST["status"] ?? 1);
@@ -75,6 +77,7 @@ ob_start();
         <?php } ?>
 
         <form method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION["csrf_token"] ?? '') ?>">
             <div class="mb-3">
                 <label class="form-label fw-bold">Tên danh mục <span class="text-danger">*</span></label>
                 <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($name) ?>">

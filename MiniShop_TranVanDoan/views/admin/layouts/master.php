@@ -1,10 +1,33 @@
 <?php
 // Master layout: nhận $pageTitle và $content từ các trang con
+require_once __DIR__ . '/../../../models/User.php';
+require_once __DIR__ . '/../../../middleware/AuthMiddleware.php';
+require_once __DIR__ . '/../../../middleware/CsrfMiddleware.php';
+
+AuthMiddleware::handle();
+CsrfMiddleware::generateToken();
+
+$user = $_SESSION["user"] ?? null;
 include 'header.php';
 ?>
 <div class="d-flex">
     <?php include 'sidebar.php'; ?>
     <div class="flex-grow-1">
+        <!-- Header Bar -->
+        <div class="container-fluid d-flex justify-content-between align-items-center bg-white shadow-sm p-3">
+            <button id="btnMenu" class="btn btn-outline-secondary">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-person-circle fs-3 text-secondary"></i>
+                <span class="fw-bold">
+                    <?= htmlspecialchars($user->fullname ?? '') ?>
+                </span>
+                <a href="/TranVanDoan_LTW1/MiniShop_TranVanDoan/views/admin/logout.php" class="text-decoration-none text-danger ms-3">
+                    | <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                </a>
+            </div>
+        </div>
         <div class="p-4">
             <h2 class="mb-4"><?= $pageTitle ?></h2>
             <?= $content ?>

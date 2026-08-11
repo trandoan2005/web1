@@ -1,10 +1,12 @@
 <?php
 $pageTitle = "Quản lý Danh mục";
 require_once __DIR__ . '/../../../dao/CategoryDAO.php';
+require_once __DIR__ . '/../../../middleware/CsrfMiddleware.php';
 $categoryDAO = new CategoryDAO();
 
 // Xử lý Xóa
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btnDelete'])) {
+    CsrfMiddleware::verify();
     $id = $_POST['id'];
     if ($categoryDAO->delete($id)) {
         header("Location: index.php?msg=deleted");
@@ -109,6 +111,7 @@ ob_start();
                         <a href="detail.php?id=<?= $item->id ?>" class="btn btn-sm btn-info text-white" title="Chi tiết"><i class="bi bi-eye"></i></a>
                         <a href="edit.php?id=<?= $item->id ?>" class="btn btn-sm btn-warning" title="Sửa"><i class="bi bi-pencil"></i></a>
                         <form method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa?');" class="d-inline">
+                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION["csrf_token"] ?? '') ?>">
                             <input type="hidden" name="id" value="<?= $item->id ?>">
                             <button type="submit" name="btnDelete" class="btn btn-sm btn-danger" title="Xóa"><i class="bi bi-trash"></i></button>
                         </form>
