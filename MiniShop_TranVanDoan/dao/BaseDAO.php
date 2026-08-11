@@ -41,8 +41,11 @@ class BaseDAO extends Database
     }
 
     // Đếm tổng số bản ghi
-    public function count(string $table, string $column = "", string $keyword = "")
+    public function count(string $table = "", string $column = "", string $keyword = "")
     {
+        if ($table === "") {
+            $table = $this->tableName;
+        }
         try {
             if ($keyword == "") {
                 $sql = "SELECT COUNT(*) AS total FROM $table";
