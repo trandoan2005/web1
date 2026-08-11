@@ -117,6 +117,41 @@ class ProductDAO extends BaseDAO
         }
     }
 
+    // Lấy dữ liệu phân trang, tìm kiếm và sắp xếp
+    public function getPage(int $limit, int $offset, string $keyword = "", string $sort = "")
+    {
+        $sql = "SELECT p.*, c.name as cateName, b.name as brandName 
+                FROM products p 
+                INNER JOIN categories c ON p.category_id = c.id 
+                INNER JOIN brands b ON p.brand_id = b.id 
+                WHERE p.name LIKE ? ";
+                
+        // Xử lý sắp xếp (Sort)
+        $orderClause = "ORDER BY p.name ASC";
+        if ($sort === "name_desc") $orderClause = "ORDER BY p.name DESC";
+        else if ($sort === "price_asc") $orderClause = "ORDER BY p.sale_price ASC";
+        else if ($sort === "price_desc") $orderClause = "ORDER BY p.sale_price DESC";
+        else if ($sort === "newest") $orderClause = "ORDER BY p.id DESC";
+
+        $sql .= " $orderClause LIMIT ? OFFSET ?";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $kw = "%$keyword%";
+            $stmt->bind_param("sii", $kw, $limit, $offset);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            $list = [];
+            while ($row = $result->fetch_assoc()) {
+                $list[] = $this->mapRow($row);
+            }
+            return $list;
+        } catch (Exception $e) {
+            return [];
+        }
+    }
+
     // Hàm thêm hình ảnh gallery
     public function insertImage($productId, $imageName) {
         try {

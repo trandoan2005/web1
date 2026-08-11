@@ -10,16 +10,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btnDelete'])) {
         header("Location: index.php?msg=deleted");
         exit;
     } else {
-        $error = "Xóa thất bại!";
+        $error = "Xóa thất bại (có thể thương hiệu đang chứa sản phẩm)!";
     }
 }
 
-// Xử lý Tìm kiếm
-$keyword = "";
-if (isset($_GET["keyword"])) {
-    $keyword = trim($_GET["keyword"]);
+// Đọc tham số URL
+$keyword = trim($_GET["keyword"] ?? "");
+$limit = (int)($_GET["limit"] ?? 10);
+$page = (int)($_GET["page"] ?? 1);
+$sort = $_GET["sort"] ?? "name_asc";
+$offset = ($page - 1) * $limit;
+
+// Truy vấn
+$totalRecords = $brandDAO->count("brands", "name", $keyword);
+$totalPages = ceil($totalRecords / $limit);
+if ($page > $totalPages && $totalPages > 0) {
+    $page = $totalPages;
+    $offset = ($page - 1) * $limit;
 }
-$brands = $brandDAO->getAll($keyword);
+
+$brands = $brandDAO->getPage($limit, $offset, $keyword, $sort);
 
 ob_start();
 ?>
@@ -28,31 +38,40 @@ ob_start();
     <div class="alert alert-danger"><?= $error ?></div>
 <?php endif; ?>
 <?php if (isset($_GET['msg']) && $_GET['msg'] == 'deleted'): ?>
-    <div class="alert alert-success">Đã xóa thương hiệu thành công!</div>
+    <div class="alert alert-success">Đã xóa thành công!</div>
 <?php endif; ?>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <!-- Form tìm kiếm -->
+    <!-- Form tìm kiếm và sắp xếp -->
     <form class="row gx-2 align-items-center" method="GET">
         <div class="col-auto">
-            <input type="text" name="keyword" class="form-control" placeholder="Nhập từ khóa..." value="<?= htmlspecialchars($keyword) ?>">
+            <input type="text" name="keyword" class="form-control" placeholder="Tên thương hiệu..." value="<?= htmlspecialchars($keyword) ?>">
         </div>
+        <div class="col-auto">
+            <select name="sort" class="form-select" onchange="this.form.submit()">
+                <option value="name_asc" <?= $sort == "name_asc" ? 'selected' : '' ?>>Tên A-Z</option>
+                <option value="name_desc" <?= $sort == "name_desc" ? 'selected' : '' ?>>Tên Z-A</option>
+                <option value="newest" <?= $sort == "newest" ? 'selected' : '' ?>>Mới nhất</option>
+            </select>
+        </div>
+        <input type="hidden" name="limit" value="<?= $limit ?>">
         <div class="col-auto">
             <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Tìm kiếm</button>
         </div>
-        <?php if (!empty($keyword)): ?>
+        <?php if (!empty($keyword) || $sort != 'name_asc'): ?>
             <div class="col-auto">
                 <a href="index.php" class="btn btn-secondary">Hủy</a>
             </div>
         <?php endif; ?>
     </form>
     
-    <!-- Nút thêm mới -->
     <a href="create.php" class="btn btn-success"><i class="bi bi-plus-lg"></i> Thêm mới</a>
 </div>
 
 <?php if (empty($brands)): ?>
-    <div class="alert alert-warning">Không tìm thấy dữ liệu.</div>
+    <div class="alert alert-warning">
+        Không tìm thấy thương hiệu nào <?= !empty($keyword) ? 'phù hợp với từ khóa "' . htmlspecialchars($keyword) . '"' : '' ?>.
+    </div>
 <?php else: ?>
     <table class="table table-bordered table-striped table-hover align-middle text-center">
         <thead class="table-dark">
@@ -61,40 +80,86 @@ ob_start();
                 <th>Logo</th>
                 <th>Tên thương hiệu</th>
                 <th>Trạng thái</th>
-                <th>Ngày tạo</th>
                 <th>Chức năng</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($brands as $index => $brand): ?>
+            <?php 
+            $stt = $offset + 1;
+            foreach ($brands as $item): 
+            ?>
                 <tr>
-                    <td><?= $index + 1 ?></td>
+                    <td><?= $stt++ ?></td>
                     <td>
-                        <?php if ($brand->logo != "") { ?>
-                            <img src="../../../uploads/brands/<?= htmlspecialchars($brand->logo) ?>" alt="<?= htmlspecialchars($brand->name) ?>" class="img-thumbnail" width="80">
+                        <?php if ($item->logo != "") { ?>
+                            <img src="../../../uploads/brands/<?= htmlspecialchars($item->logo) ?>" alt="<?= htmlspecialchars($item->name) ?>" class="img-thumbnail" width="80">
                         <?php } else { ?>
                             <span class="text-muted">No Image</span>
                         <?php } ?>
                     </td>
-                    <td class="fw-bold text-primary"><?= htmlspecialchars($brand->name ?? '') ?></td>
+                    <td class="text-start fw-bold"><?= htmlspecialchars($item->name) ?></td>
                     <td>
-                        <span class="badge <?= $brand->status ? 'bg-success' : 'bg-secondary' ?>">
-                            <?= $brand->status ? 'Hiện' : 'Ẩn' ?>
+                        <span class="badge <?= $item->status ? 'bg-success' : 'bg-secondary' ?>">
+                            <?= $item->status ? 'Hoạt động' : 'Khóa' ?>
                         </span>
                     </td>
-                    <td><?= date('d/m/Y', strtotime($brand->createdAt)) ?></td>
                     <td>
-                        <a href="detail.php?id=<?= $brand->id ?>" class="btn btn-sm btn-info text-white"><i class="bi bi-eye"></i></a>
-                        <a href="edit.php?id=<?= $brand->id ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
+                        <a href="detail.php?id=<?= $item->id ?>" class="btn btn-sm btn-info text-white" title="Chi tiết"><i class="bi bi-eye"></i></a>
+                        <a href="edit.php?id=<?= $item->id ?>" class="btn btn-sm btn-warning" title="Sửa"><i class="bi bi-pencil"></i></a>
                         <form method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa?');" class="d-inline">
-                            <input type="hidden" name="id" value="<?= $brand->id ?>">
-                            <button type="submit" name="btnDelete" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                            <input type="hidden" name="id" value="<?= $item->id ?>">
+                            <button type="submit" name="btnDelete" class="btn btn-sm btn-danger" title="Xóa"><i class="bi bi-trash"></i></button>
                         </form>
                     </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
+
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <!-- Chỉnh số lượng hiển thị -->
+        <div class="d-flex align-items-center">
+            <label class="me-2">Hiển thị:</label>
+            <form method="GET">
+                <input type="hidden" name="keyword" value="<?= htmlspecialchars($keyword) ?>">
+                <input type="hidden" name="sort" value="<?= htmlspecialchars($sort) ?>">
+                <select name="limit" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="5" <?= $limit == 5 ? 'selected' : '' ?>>5</option>
+                    <option value="10" <?= $limit == 10 ? 'selected' : '' ?>>10</option>
+                    <option value="20" <?= $limit == 20 ? 'selected' : '' ?>>20</option>
+                </select>
+            </form>
+        </div>
+        
+        <!-- Phân trang -->
+        <?php if ($totalPages > 1): ?>
+        <nav>
+            <ul class="pagination mb-0">
+                <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
+                    <a class="page-link" href="?keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=1">Đầu</a>
+                </li>
+                <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
+                    <a class="page-link" href="?keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $page - 1 ?>">Trước</a>
+                </li>
+                
+                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                        <a class="page-link" href="?keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $i ?>">
+                            <?= $i ?>
+                        </a>
+                    </li>
+                <?php endfor; ?>
+                
+                <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
+                    <a class="page-link" href="?keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $page + 1 ?>">Sau</a>
+                </li>
+                <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
+                    <a class="page-link" href="?keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $totalPages ?>">Cuối</a>
+                </li>
+            </ul>
+        </nav>
+        <?php endif; ?>
+    </div>
 <?php endif; ?>
 
 <?php

@@ -79,5 +79,32 @@ class CategoryDAO extends BaseDAO
     {
         return $this->deleteById($id);
     }
+
+    public function getPage(int $limit, int $offset, string $keyword = "", string $sort = "")
+    {
+        $sql = "SELECT * FROM categories WHERE name LIKE ? ";
+        
+        $orderClause = "ORDER BY name ASC";
+        if ($sort === "name_desc") $orderClause = "ORDER BY name DESC";
+        else if ($sort === "newest") $orderClause = "ORDER BY id DESC";
+
+        $sql .= " $orderClause LIMIT ? OFFSET ?";
+
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $kw = "%$keyword%";
+            $stmt->bind_param("sii", $kw, $limit, $offset);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            $list = [];
+            while ($row = $result->fetch_assoc()) {
+                $list[] = new Category($row['id'], $row['name'], $row['description'], $row['image'], $row['status'], $row['created_at'], $row['updated_at']);
+            }
+            return $list;
+        } catch (Exception $e) {
+            return [];
+        }
+    }
 }
 ?>
