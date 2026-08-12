@@ -1,47 +1,4 @@
-<?php
-$pageTitle = "Cập nhật trạng thái Đơn hàng";
-require_once __DIR__ . '/../../../dao/OrderDAO.php';
-$orderDAO = new OrderDAO();
-
-if (!isset($_GET['id'])) {
-    header("Location: index.php");
-    exit;
-}
-$id = (int)$_GET['id'];
-$order = $orderDAO->findById($id);
-
-if (!$order) {
-    header("Location: index.php");
-    exit;
-}
-
-$error = "";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $newStatus = (int)$_POST['status'];
-    $currentStatus = (int)$order->status;
-    
-    // Logic validate quá trình chuyển đổi trạng thái
-    $isValid = false;
-    if ($currentStatus == 0 && in_array($newStatus, [0, 1, 4])) $isValid = true;
-    elseif ($currentStatus == 1 && in_array($newStatus, [1, 2, 4])) $isValid = true;
-    elseif ($currentStatus == 2 && in_array($newStatus, [2, 3])) $isValid = true;
-    elseif ($currentStatus == 3 && $newStatus == 3) $isValid = true;
-    elseif ($currentStatus == 4 && $newStatus == 4) $isValid = true;
-    
-    if (!$isValid) {
-        $error = "Chuyển đổi trạng thái không hợp lệ!";
-    } else {
-        if ($orderDAO->updateStatus($id, $newStatus)) {
-            header("Location: index.php?msg=updated");
-            exit;
-        } else {
-            $error = "Cập nhật trạng thái thất bại!";
-        }
-    }
-}
-
-ob_start();
+<?php ob_start();
 ?>
 <div class="card shadow-sm" style="max-width: 600px; margin: 0 auto;">
     <div class="card-header bg-warning text-dark">

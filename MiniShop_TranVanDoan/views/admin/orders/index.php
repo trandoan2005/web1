@@ -1,26 +1,4 @@
-<?php
-$pageTitle = "Quản lý Đơn hàng";
-require_once __DIR__ . '/../../../dao/OrderDAO.php';
-$orderDAO = new OrderDAO();
-
-// Đọc tham số URL
-$keyword = trim($_GET["keyword"] ?? "");
-$limit = (int)($_GET["limit"] ?? 10);
-$page = (int)($_GET["page"] ?? 1);
-$sort = $_GET["sort"] ?? "newest";
-$offset = ($page - 1) * $limit;
-
-// Truy vấn
-$totalRecords = $orderDAO->count("orders o LEFT JOIN customers c ON o.customer_id = c.id", "c.fullname", $keyword);
-$totalPages = ceil($totalRecords / $limit);
-if ($page > $totalPages && $totalPages > 0) {
-    $page = $totalPages;
-    $offset = ($page - 1) * $limit;
-}
-
-$orders = $orderDAO->getPage($limit, $offset, $keyword, $sort);
-
-ob_start();
+<?php ob_start();
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-3">

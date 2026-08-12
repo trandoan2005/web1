@@ -1,21 +1,4 @@
-<?php
-$pageTitle = "Chi tiết Sản phẩm";
-require_once __DIR__ . '/../../../dao/ProductDAO.php';
-$productDAO = new ProductDAO();
-
-if (!isset($_GET['id'])) {
-    header("Location: index.php");
-    exit;
-}
-$id = (int)$_GET['id'];
-$product = $productDAO->findById($id);
-
-if (!$product) {
-    header("Location: index.php");
-    exit;
-}
-
-ob_start();
+<?php ob_start();
 ?>
 <div class="card shadow-sm">
     <div class="card-header bg-info text-white">

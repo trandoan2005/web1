@@ -1,58 +1,5 @@
 <?php
-require_once __DIR__ . '/../../dao/UserDAO.php';
-require_once __DIR__ . '/../../middleware/GuestMiddleware.php';
-require_once __DIR__ . '/../../middleware/CsrfMiddleware.php';
-
-session_start();
-GuestMiddleware::handle();
-CsrfMiddleware::generateToken();
-
-$errors = [];
-$username = "";
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    CsrfMiddleware::verify();
-
-    $username = trim($_POST["username"] ?? "");
-    $password = $_POST["password"] ?? "";
-
-    // Validate
-    if ($username === "") {
-        $errors["username"] = "Vui lòng nhập tên đăng nhập.";
-    }
-    if ($password === "") {
-        $errors["password"] = "Vui lòng nhập mật khẩu.";
-    }
-
-    // Nếu không có lỗi thì tìm user
-    if (empty($errors)) {
-        $userDAO = new UserDAO();
-        $user = $userDAO->findByUsername($username);
-
-        if (!$user) {
-            $errors["username"] = "Tên đăng nhập không tồn tại.";
-        } elseif (!password_verify($password, $user->password)) {
-            $errors["password"] = "Mật khẩu không chính xác.";
-        } else {
-            // Kiểm tra trạng thái hoạt động của User
-            if ($user->status == 0) {
-                $errors["username"] = "Tài khoản của bạn đã bị khóa.";
-            } else {
-                $_SESSION["user"] = $user;
-
-                // Xử lý Remember Me (Ghi nhớ đăng nhập)
-                if (isset($_POST['remember'])) {
-                    // Tạo mã token đơn giản (Trong thực tế nên lưu token vào DB)
-                    $token = base64_encode($user->username . ':' . md5($user->password . 'secret'));
-                    setcookie('remember_token', $token, time() + (86400 * 30), "/"); // 30 ngày
-                }
-
-                header("Location: dashboard.php");
-                exit;
-            }
-        }
-    }
-}
+// Tách logic sang AuthController
 ?>
 <!DOCTYPE html>
 <html lang="vi">

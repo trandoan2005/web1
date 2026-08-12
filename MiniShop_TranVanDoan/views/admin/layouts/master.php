@@ -23,7 +23,7 @@ include 'header.php';
                 <span class="fw-bold">
                     <?= htmlspecialchars($user->fullname ?? '') ?>
                 </span>
-                <a href="/TranVanDoan_LTW1/MiniShop_TranVanDoan/views/admin/logout.php" class="text-decoration-none text-danger ms-3">
+                <a href="index.php?area=admin&controller=auth&action=logout" class="text-decoration-none text-danger ms-3">
                     | <i class="bi bi-box-arrow-right"></i> Đăng xuất
                 </a>
             </div>

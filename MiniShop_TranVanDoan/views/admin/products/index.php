@@ -1,38 +1,4 @@
-<?php
-$pageTitle = "Quản lý Sản phẩm";
-require_once __DIR__ . '/../../../dao/ProductDAO.php';
-$productDAO = new ProductDAO();
-
-// Xử lý Xóa
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btnDelete'])) {
-    $id = $_POST['id'];
-    if ($productDAO->delete($id)) {
-        header("Location: index.php?msg=deleted");
-        exit;
-    } else {
-        $error = "Xóa thất bại! Dữ liệu đang được sử dụng ở nơi khác (ví dụ: đã có trong đơn hàng).";
-    }
-}
-
-// Đọc tham số URL
-$keyword = trim($_GET["keyword"] ?? "");
-$limit = (int)($_GET["limit"] ?? 10);
-$page = (int)($_GET["page"] ?? 1);
-$sort = $_GET["sort"] ?? "name_asc";
-$offset = ($page - 1) * $limit;
-
-// Truy vấn
-$totalRecords = $productDAO->count("products", "name", $keyword);
-$totalPages = ceil($totalRecords / $limit);
-// Đảm bảo page hợp lệ
-if ($page > $totalPages && $totalPages > 0) {
-    $page = $totalPages;
-    $offset = ($page - 1) * $limit;
-}
-
-$products = $productDAO->getPage($limit, $offset, $keyword, $sort);
-
-ob_start();
+<?php ob_start();
 ?>
 
 <?php if (isset($error)): ?>

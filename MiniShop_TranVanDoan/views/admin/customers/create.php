@@ -1,43 +1,4 @@
-<?php
-$pageTitle = "Thêm Khách hàng";
-require_once __DIR__ . '/../../../dao/CustomerDAO.php';
-$customerDAO = new CustomerDAO();
-
-$errors = [];
-$fullname = "";
-$email = "";
-$phone = "";
-$address = "";
-
-$status = 1;
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $fullname = trim($_POST["fullname"] ?? "");
-    $email = trim($_POST["email"] ?? "");
-    $phone = trim($_POST["phone"] ?? "");
-    $address = trim($_POST["address"] ?? "");
-
-    $status = $_POST["status"] ?? 1;
-
-    // Validation
-    if ($fullname === "") { $errors[] = "Họ tên không được để trống."; }
-    if ($email === "") { $errors[] = "Email không được để trống."; }
-    if ($phone === "") { $errors[] = "Điện thoại không được để trống."; }
-    if ($address === "") { $errors[] = "Địa chỉ không được để trống."; }
-
-
-    if (empty($errors)) {
-        $obj = new Customer(0, $fullname, $email, $phone, $address, $status);
-        if ($customerDAO->insert($obj)) {
-            header("Location: index.php");
-            exit;
-        } else {
-            $errors[] = "Thêm thất bại. Vui lòng thử lại.";
-        }
-    }
-}
-
-ob_start();
+<?php ob_start();
 ?>
 <div class="card shadow-sm">
     <div class="card-header bg-success text-white">

@@ -8,28 +8,28 @@ $baseUrl = '/TranVanDoan_LTW1/MiniShop_TranVanDoan/views/admin';
     <div class="sidebar-heading text-center py-4 border-bottom">
         <h4><i class="bi bi-shop"></i> MiniShop</h4>
         <small>Admin Panel</small>
-    </div>
     <div class="list-group list-group-flush">
-        <a href="<?= $baseUrl ?>/dashboard.php" class="list-group-item list-group-item-action bg-dark text-white <?= ($currentPage == 'dashboard') ? 'active' : '' ?>">
+        <a href="index.php?area=admin&controller=dashboard&action=index" class="list-group-item list-group-item-action bg-dark text-white <?= (isset($_GET['controller']) && $_GET['controller'] == 'dashboard') ? 'active' : '' ?>">
             <i class="bi bi-speedometer2"></i> Dashboard
         </a>
-        <a href="<?= $baseUrl ?>/categories/index.php" class="list-group-item list-group-item-action bg-dark text-white <?= ($currentDir == 'categories') ? 'active' : '' ?>">
+        <a href="index.php?area=admin&controller=category&action=index" class="list-group-item list-group-item-action bg-dark text-white <?= (isset($_GET['controller']) && $_GET['controller'] == 'category') ? 'active' : '' ?>">
             <i class="bi bi-grid"></i> Danh mục
         </a>
-        <a href="<?= $baseUrl ?>/brands/index.php" class="list-group-item list-group-item-action bg-dark text-white <?= ($currentDir == 'brands') ? 'active' : '' ?>">
+        <a href="index.php?area=admin&controller=brand&action=index" class="list-group-item list-group-item-action bg-dark text-white <?= (isset($_GET['controller']) && $_GET['controller'] == 'brand') ? 'active' : '' ?>">
             <i class="bi bi-bookmark-star"></i> Thương hiệu
         </a>
-        <a href="<?= $baseUrl ?>/products/index.php" class="list-group-item list-group-item-action bg-dark text-white <?= ($currentDir == 'products') ? 'active' : '' ?>">
+        <a href="index.php?area=admin&controller=product&action=index" class="list-group-item list-group-item-action bg-dark text-white <?= (isset($_GET['controller']) && $_GET['controller'] == 'product') ? 'active' : '' ?>">
             <i class="bi bi-box-seam"></i> Sản phẩm
         </a>
-        <a href="<?= $baseUrl ?>/customers/index.php" class="list-group-item list-group-item-action bg-dark text-white <?= ($currentDir == 'customers') ? 'active' : '' ?>">
+        <a href="index.php?area=admin&controller=customer&action=index" class="list-group-item list-group-item-action bg-dark text-white <?= (isset($_GET['controller']) && $_GET['controller'] == 'customer') ? 'active' : '' ?>">
             <i class="bi bi-people"></i> Khách hàng
         </a>
-        <a href="<?= $baseUrl ?>/users/index.php" class="list-group-item list-group-item-action bg-dark text-white <?= ($currentDir == 'users') ? 'active' : '' ?>">
+        <a href="index.php?area=admin&controller=user&action=index" class="list-group-item list-group-item-action bg-dark text-white <?= (isset($_GET['controller']) && $_GET['controller'] == 'user') ? 'active' : '' ?>">
             <i class="bi bi-person-gear"></i> Người dùng
         </a>
-        <a href="<?= $baseUrl ?>/orders/index.php" class="list-group-item list-group-item-action bg-dark text-white <?= ($currentDir == 'orders') ? 'active' : '' ?>">
+        <a href="index.php?area=admin&controller=order&action=index" class="list-group-item list-group-item-action bg-dark text-white <?= (isset($_GET['controller']) && $_GET['controller'] == 'order') ? 'active' : '' ?>">
             <i class="bi bi-cart3"></i> Đơn hàng
         </a>
+    </div>
     </div>
 </div>

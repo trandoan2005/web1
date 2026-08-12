@@ -1,37 +1,4 @@
-<?php
-$pageTitle = "Quản lý Khách hàng";
-require_once __DIR__ . '/../../../dao/CustomerDAO.php';
-$customerDAO = new CustomerDAO();
-
-// Xử lý Xóa
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btnDelete'])) {
-    $id = $_POST['id'];
-    if ($customerDAO->delete($id)) {
-        header("Location: index.php?msg=deleted");
-        exit;
-    } else {
-        $error = "Xóa thất bại (có thể khách hàng này đang có đơn hàng)!";
-    }
-}
-
-// Đọc tham số URL
-$keyword = trim($_GET["keyword"] ?? "");
-$limit = (int)($_GET["limit"] ?? 10);
-$page = (int)($_GET["page"] ?? 1);
-$sort = $_GET["sort"] ?? "name_asc";
-$offset = ($page - 1) * $limit;
-
-// Truy vấn
-$totalRecords = $customerDAO->count("customers", "fullname", $keyword);
-$totalPages = ceil($totalRecords / $limit);
-if ($page > $totalPages && $totalPages > 0) {
-    $page = $totalPages;
-    $offset = ($page - 1) * $limit;
-}
-
-$customers = $customerDAO->getPage($limit, $offset, $keyword, $sort);
-
-ob_start();
+<?php ob_start();
 ?>
 
 <?php if (isset($error)): ?>

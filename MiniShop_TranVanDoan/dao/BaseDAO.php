@@ -1,5 +1,7 @@
 <?php
-require_once __DIR__ . '/../config/Database.php';
+namespace DAO;
+use Config\Database;
+use Exception;
 
 class BaseDAO extends Database
 {

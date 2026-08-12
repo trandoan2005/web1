@@ -1,21 +1,4 @@
-<?php
-$pageTitle = "Chi tiết Thương hiệu";
-require_once __DIR__ . '/../../../dao/BrandDAO.php';
-$brandDAO = new BrandDAO();
-
-if (!isset($_GET['id'])) {
-    header("Location: index.php");
-    exit;
-}
-$id = (int)$_GET['id'];
-$obj = $brandDAO->findById($id);
-
-if (!$obj) {
-    header("Location: index.php");
-    exit;
-}
-
-ob_start();
+<?php ob_start();
 ?>
 <div class="card shadow-sm">
     <div class="card-header bg-info text-white">

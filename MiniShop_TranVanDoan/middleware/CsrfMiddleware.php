@@ -1,4 +1,7 @@
 <?php
+namespace Middleware;
+use DAO\UserDAO;
+
 class CsrfMiddleware
 {
     public static function generateToken()

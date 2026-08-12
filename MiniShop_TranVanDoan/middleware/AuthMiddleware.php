@@ -1,4 +1,7 @@
 <?php
+namespace Middleware;
+use DAO\UserDAO;
+
 class AuthMiddleware
 {
     public static function handle()
@@ -12,7 +15,7 @@ class AuthMiddleware
             $token = base64_decode($_COOKIE['remember_token']);
             if (strpos($token, ':') !== false) {
                 list($username, $hash) = explode(':', $token);
-                require_once __DIR__ . '/../dao/UserDAO.php';
+                
                 $userDAO = new UserDAO();
                 $user = $userDAO->findByUsername($username);
                 if ($user && $user->status == 1) {

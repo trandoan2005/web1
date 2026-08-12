@@ -1,39 +1,4 @@
-<?php
-$pageTitle = "Quản lý Danh mục";
-require_once __DIR__ . '/../../../dao/CategoryDAO.php';
-require_once __DIR__ . '/../../../middleware/CsrfMiddleware.php';
-$categoryDAO = new CategoryDAO();
-
-// Xử lý Xóa
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btnDelete'])) {
-    CsrfMiddleware::verify();
-    $id = $_POST['id'];
-    if ($categoryDAO->delete($id)) {
-        header("Location: index.php?msg=deleted");
-        exit;
-    } else {
-        $error = "Xóa thất bại (có thể danh mục này đang chứa sản phẩm)!";
-    }
-}
-
-// Đọc tham số URL
-$keyword = trim($_GET["keyword"] ?? "");
-$limit = (int)($_GET["limit"] ?? 10);
-$page = (int)($_GET["page"] ?? 1);
-$sort = $_GET["sort"] ?? "name_asc";
-$offset = ($page - 1) * $limit;
-
-// Truy vấn
-$totalRecords = $categoryDAO->count("categories", "name", $keyword);
-$totalPages = ceil($totalRecords / $limit);
-if ($page > $totalPages && $totalPages > 0) {
-    $page = $totalPages;
-    $offset = ($page - 1) * $limit;
-}
-
-$categories = $categoryDAO->getPage($limit, $offset, $keyword, $sort);
-
-ob_start();
+<?php ob_start();
 ?>
 
 <?php if (isset($error)): ?>

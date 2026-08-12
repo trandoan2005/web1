@@ -1,37 +1,4 @@
-<?php
-$pageTitle = "Quản lý Thương hiệu";
-require_once __DIR__ . '/../../../dao/BrandDAO.php';
-$brandDAO = new BrandDAO();
-
-// Xử lý Xóa
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['btnDelete'])) {
-    $id = $_POST['id'];
-    if ($brandDAO->delete($id)) {
-        header("Location: index.php?msg=deleted");
-        exit;
-    } else {
-        $error = "Xóa thất bại (có thể thương hiệu đang chứa sản phẩm)!";
-    }
-}
-
-// Đọc tham số URL
-$keyword = trim($_GET["keyword"] ?? "");
-$limit = (int)($_GET["limit"] ?? 10);
-$page = (int)($_GET["page"] ?? 1);
-$sort = $_GET["sort"] ?? "name_asc";
-$offset = ($page - 1) * $limit;
-
-// Truy vấn
-$totalRecords = $brandDAO->count("brands", "name", $keyword);
-$totalPages = ceil($totalRecords / $limit);
-if ($page > $totalPages && $totalPages > 0) {
-    $page = $totalPages;
-    $offset = ($page - 1) * $limit;
-}
-
-$brands = $brandDAO->getPage($limit, $offset, $keyword, $sort);
-
-ob_start();
+<?php ob_start();
 ?>
 
 <?php if (isset($error)): ?>

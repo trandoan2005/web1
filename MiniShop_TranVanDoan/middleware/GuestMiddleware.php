@@ -1,4 +1,7 @@
 <?php
+namespace Middleware;
+use DAO\UserDAO;
+
 class GuestMiddleware
 {
     public static function handle()

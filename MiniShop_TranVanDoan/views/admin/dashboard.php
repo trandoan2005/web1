@@ -1,33 +1,5 @@
 <?php
-$pageTitle = "Dashboard";
-
-// Require DAO
-require_once __DIR__ . '/../../dao/CategoryDAO.php';
-require_once __DIR__ . '/../../dao/BrandDAO.php';
-require_once __DIR__ . '/../../dao/ProductDAO.php';
-require_once __DIR__ . '/../../dao/CustomerDAO.php';
-require_once __DIR__ . '/../../dao/OrderDAO.php';
-
-$categoryDAO = new CategoryDAO();
-$brandDAO = new BrandDAO();
-$productDAO = new ProductDAO();
-$customerDAO = new CustomerDAO();
-$orderDAO = new OrderDAO();
-
-// Thống kê
-$totalCategories = $categoryDAO->count();
-$totalBrands = $brandDAO->count();
-$totalProducts = $productDAO->count();
-$totalCustomers = $customerDAO->count();
-$totalOrders = $orderDAO->count();
-
-// 5 sản phẩm mới nhất
-$latestProducts = $productDAO->getLatest(5);
-
-// 5 đơn hàng mới nhất
-$latestOrders = $orderDAO->getLatest(5);
-
-// Output buffering
+// Tách logic sang DashboardController
 ob_start();
 ?>
 

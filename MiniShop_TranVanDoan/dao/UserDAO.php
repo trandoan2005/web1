@@ -1,6 +1,8 @@
 <?php
-require_once __DIR__ . '/BaseDAO.php';
-require_once __DIR__ . '/../models/User.php';
+namespace DAO;
+use Config\Database;
+use Exception;
+use Models\User;
 
 class UserDAO extends BaseDAO
 {

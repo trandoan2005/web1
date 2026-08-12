@@ -1,47 +1,4 @@
-<?php
-$pageTitle = "Chi tiết Đơn hàng";
-require_once __DIR__ . '/../../../dao/OrderDAO.php';
-require_once __DIR__ . '/../../../dao/OrderDetailDAO.php';
-
-$orderDAO = new OrderDAO();
-$orderDetailDAO = new OrderDetailDAO();
-
-if (!isset($_GET['id'])) {
-    header("Location: index.php");
-    exit;
-}
-$id = (int)$_GET['id'];
-$order = $orderDAO->findById($id);
-
-if (!$order) {
-    header("Location: index.php");
-    exit;
-}
-
-$orderDetails = $orderDetailDAO->getByOrderId($id);
-
-function getStatusText($status) {
-    switch ($status) {
-        case 0: return 'Chờ xác nhận';
-        case 1: return 'Đã xác nhận';
-        case 2: return 'Đang giao';
-        case 3: return 'Hoàn thành';
-        case 4: return 'Đã hủy';
-        default: return 'Không xác định';
-    }
-}
-function getStatusClass($status) {
-    switch ($status) {
-        case 0: return 'bg-secondary';
-        case 1: return 'bg-info text-dark';
-        case 2: return 'bg-warning text-dark';
-        case 3: return 'bg-success';
-        case 4: return 'bg-danger';
-        default: return 'bg-dark';
-    }
-}
-
-ob_start();
+<?php ob_start();
 ?>
 
 <div class="row">
