@@ -25,6 +25,7 @@ class AuthController
                 $errors["password"] = "Vui lòng nhập mật khẩu.";
             }
 
+
             if (empty($errors)) {
                 $userDAO = new UserDAO();
                 $user = $userDAO->findByUsername($username);
@@ -36,9 +37,10 @@ class AuthController
                 } else {
                     if ($user->status == 0) {
                         $errors["username"] = "Tài khoản của bạn đã bị khóa.";
-                    } else {
+                    } else { 
+
                         // Đăng nhập thành công
-                        $_SESSION['user_id'] = $user->id;
+                        $_SESSION['user'] = $user;
                         $_SESSION['username'] = $user->username;
                         $_SESSION['role'] = $user->role;
                         

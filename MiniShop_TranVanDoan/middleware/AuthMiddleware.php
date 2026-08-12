@@ -6,9 +6,8 @@ class AuthMiddleware
 {
     public static function handle()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+
+        
         
         // Remember Me Logic (nếu session chưa có nhưng cookie có)
         if (!isset($_SESSION["user"]) && isset($_COOKIE['remember_token'])) {
@@ -26,6 +25,7 @@ class AuthMiddleware
                 }
             }
         }
+
 
         if (!isset($_SESSION["user"])) {
             header("Location: index.php?area=admin&controller=auth&action=login");

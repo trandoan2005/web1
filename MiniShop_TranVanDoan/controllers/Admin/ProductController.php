@@ -8,6 +8,7 @@ class ProductController
 {
     public function index()
     {
+
 $pageTitle = "Quản lý Sản phẩm";
 
 $productDAO = new ProductDAO();

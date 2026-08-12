@@ -14,9 +14,9 @@ if ($area === "admin" && $controller !== "auth") {
 }
 
 // *** Kiểm tra Guest
-if ($area === "admin" && $controller === "auth" && $action === "login") {
-    \Middleware\GuestMiddleware::handle();
-}
+// if ($area === "admin" && $controller === "auth" && $action === "login") {
+//     \Middleware\GuestMiddleware::handle();
+// }
 
 // *** Kiểm tra CSRF Token
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     //     \Middleware\CsrfMiddleware::generateToken();
     // }
 }
-// Ta sẽ sinh CSRF token ngay tại Entry Point cho mọi Request (để load vào Form)
+// Sinh CSRF token cho mọi Request (để form có token khi render)
 \Middleware\CsrfMiddleware::generateToken();
 
 // Xác định tên Controller
