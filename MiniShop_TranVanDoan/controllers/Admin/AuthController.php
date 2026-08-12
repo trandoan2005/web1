@@ -5,23 +5,23 @@ use DAO\UserDAO;
 use Middleware\CsrfMiddleware;
 
 class AuthController
-{
     public function login()
     {
         $pageTitle = "Đăng nhập";
         $errors = [];
+        $username = "";
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            CsrfMiddleware::verify();
+            \Middleware\CsrfMiddleware::verify();
             
             $username = trim($_POST["username"] ?? "");
             $password = $_POST["password"] ?? "";
 
             if ($username === "") {
-                $errors[] = "Vui lòng nhập tên đăng nhập.";
+                $errors["username"] = "Vui lòng nhập tên đăng nhập.";
             }
             if ($password === "") {
-                $errors[] = "Vui lòng nhập mật khẩu.";
+                $errors["password"] = "Vui lòng nhập mật khẩu.";
             }
 
             if (empty($errors)) {
@@ -29,12 +29,12 @@ class AuthController
                 $user = $userDAO->findByUsername($username);
 
                 if (!$user) {
-                    $errors[] = "Tài khoản không tồn tại.";
+                    $errors["username"] = "Tài khoản không tồn tại.";
                 } elseif (!password_verify($password, $user->password)) {
-                    $errors[] = "Mật khẩu không chính xác.";
+                    $errors["password"] = "Mật khẩu không chính xác.";
                 } else {
                     if ($user->status == 0) {
-                        $errors[] = "Tài khoản của bạn đã bị khóa.";
+                        $errors["username"] = "Tài khoản của bạn đã bị khóa.";
                     } else {
                         // Đăng nhập thành công
                         $_SESSION['user_id'] = $user->id;
