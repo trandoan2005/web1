@@ -28,7 +28,7 @@ class AuthMiddleware
         }
 
         if (!isset($_SESSION["user"])) {
-            header("Location: /TranVanDoan_LTW1/MiniShop_TranVanDoan/views/admin/login.php");
+            header("Location: index.php?area=admin&controller=auth&action=login");
             exit;
         }
     }
@@ -38,7 +38,7 @@ class AuthMiddleware
         self::handle();
         $user = $_SESSION["user"];
         if ($user->role !== 'admin') {
-            header("Location: /TranVanDoan_LTW1/MiniShop_TranVanDoan/views/admin/403.php");
+            header("Location: index.php?area=admin&controller=dashboard&action=error403");
             exit;
         }
     }

@@ -10,7 +10,7 @@ class GuestMiddleware
             session_start();
         }
         if (isset($_SESSION["user"])) {
-            header("Location: /TranVanDoan_LTW1/MiniShop_TranVanDoan/views/admin/dashboard.php");
+            header("Location: index.php?area=admin&controller=dashboard&action=index");
             exit;
         }
     }
