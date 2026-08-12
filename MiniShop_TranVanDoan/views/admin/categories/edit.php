@@ -25,7 +25,7 @@
             
             <div class="text-center mb-3" id="preview">
                 <?php if ($image != "") { ?>
-                    <img src="../../../uploads/categories/<?= htmlspecialchars($image) ?>" class="img-thumbnail" width="200">
+                    <img src="uploads/categories/<?= htmlspecialchars($image) ?>" class="img-thumbnail" width="200">
                 <?php } ?>
             </div>
             <div class="mb-3">

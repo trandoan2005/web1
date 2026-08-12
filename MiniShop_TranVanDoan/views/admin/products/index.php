@@ -71,7 +71,7 @@
                     <td><?= $stt++ ?></td>
                     <td>
                         <?php if ($item->image != "") { ?>
-                            <img src="../../../uploads/products/<?= htmlspecialchars($item->image) ?>" alt="<?= htmlspecialchars($item->name) ?>" class="img-thumbnail" width="80">
+                            <img src="uploads/products/<?= htmlspecialchars($item->image) ?>" alt="<?= htmlspecialchars($item->name) ?>" class="img-thumbnail" width="80">
                         <?php } else { ?>
                             <span class="text-muted">No Image</span>
                         <?php } ?>

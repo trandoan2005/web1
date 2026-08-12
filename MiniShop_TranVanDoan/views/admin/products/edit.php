@@ -73,7 +73,7 @@
             
             <div class="text-center mb-3" id="preview">
                 <?php if ($image != "") { ?>
-                    <img src="../../../uploads/products/<?= htmlspecialchars($image) ?>" class="img-thumbnail" width="200">
+                    <img src="uploads/products/<?= htmlspecialchars($image) ?>" class="img-thumbnail" width="200">
                 <?php } ?>
             </div>
             <div class="mb-3">
@@ -90,7 +90,7 @@
                     <div class="d-flex flex-wrap gap-3">
                         <?php foreach ($galleryImages as $img): ?>
                             <div class="position-relative">
-                                <img src="../../../uploads/products/<?= htmlspecialchars($img['image']) ?>" class="img-thumbnail" width="100">
+                                <img src="uploads/products/<?= htmlspecialchars($img['image']) ?>" class="img-thumbnail" width="100">
                                 <a href="edit.php?id=<?= $id ?>&delete_image_id=<?= $img['id'] ?>&image_name=<?= $img['image'] ?>" class="btn btn-sm btn-danger position-absolute top-0 end-0" onclick="return confirm('Xóa hình này?');">X</a>
                             </div>
                         <?php endforeach; ?>

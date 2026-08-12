@@ -9,7 +9,7 @@
             <div class="col-md-4 text-center mb-3">
                 <div class="mb-3">
                     <?php if (!empty($product->image)): ?>
-                        <img src="../../../uploads/products/<?= htmlspecialchars($product->image) ?>" alt="<?= htmlspecialchars($product->name) ?>" class="img-fluid rounded border" style="max-height: 300px;">
+                        <img src="uploads/products/<?= htmlspecialchars($product->image) ?>" alt="<?= htmlspecialchars($product->name) ?>" class="img-fluid rounded border" style="max-height: 300px;">
                     <?php else: ?>
                         <div class="bg-light d-flex align-items-center justify-content-center border rounded" style="height: 300px;">
                             <span class="text-muted"><i class="bi bi-image" style="font-size: 3rem;"></i><br>Chưa có ảnh</span>
@@ -25,7 +25,7 @@
                     <h6 class="fw-bold">Thư viện ảnh:</h6>
                     <div class="d-flex flex-wrap gap-2 justify-content-center mt-2">
                         <?php foreach ($galleryImages as $img): ?>
-                            <img src="../../../uploads/products/<?= htmlspecialchars($img['image']) ?>" class="img-thumbnail" width="80" style="object-fit: cover;">
+                            <img src="uploads/products/<?= htmlspecialchars($img['image']) ?>" class="img-thumbnail" width="80" style="object-fit: cover;">
                         <?php endforeach; ?>
                     </div>
                 </div>

@@ -19,7 +19,7 @@
                     <th class="table-light">Hình ảnh</th>
                     <td>
                         <?php if ($category->image != "") { ?>
-                            <img src="../../../uploads/categories/<?= htmlspecialchars($category->image) ?>" class="img-thumbnail" width="150">
+                            <img src="uploads/categories/<?= htmlspecialchars($category->image) ?>" class="img-thumbnail" width="150">
                         <?php } else { ?>
                             <span class="text-muted">No Image</span>
                         <?php } ?>

@@ -63,7 +63,7 @@
                     <td><?= $stt++ ?></td>
                     <td>
                         <?php if ($item->logo != "") { ?>
-                            <img src="../../../uploads/brands/<?= htmlspecialchars($item->logo) ?>" alt="<?= htmlspecialchars($item->name) ?>" class="img-thumbnail" width="80">
+                            <img src="uploads/brands/<?= htmlspecialchars($item->logo) ?>" alt="<?= htmlspecialchars($item->name) ?>" class="img-thumbnail" width="80">
                         <?php } else { ?>
                             <span class="text-muted">No Image</span>
                         <?php } ?>

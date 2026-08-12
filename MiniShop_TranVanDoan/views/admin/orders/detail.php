@@ -82,7 +82,7 @@
                                         <td><?= $index + 1 ?></td>
                                         <td>
                                             <?php if (!empty($od->productImage)): ?>
-                                                <img src="../../../uploads/products/<?= htmlspecialchars($od->productImage) ?>" alt="..." width="50" class="img-thumbnail">
+                                                <img src="uploads/products/<?= htmlspecialchars($od->productImage) ?>" alt="..." width="50" class="img-thumbnail">
                                             <?php else: ?>
                                                 <span class="text-muted"><i class="bi bi-image"></i></span>
                                             <?php endif; ?>

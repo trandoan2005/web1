@@ -19,7 +19,7 @@
                     <th class="table-light">Logo</th>
                     <td>
                         <?php if ($obj->logo != "") { ?>
-                            <img src="../../../uploads/brands/<?= htmlspecialchars($obj->logo) ?>" class="img-thumbnail" width="150">
+                            <img src="uploads/brands/<?= htmlspecialchars($obj->logo) ?>" class="img-thumbnail" width="150">
                         <?php } else { ?>
                             <span class="text-muted">No Image</span>
                         <?php } ?>
