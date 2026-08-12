@@ -17,7 +17,7 @@
                     <div class="card-body p-4">
                         <h3 class="text-center mb-4 text-primary fw-bold">Đăng nhập</h3>
                         
-                        <form action="login.php" method="POST">
+                        <form action="" method="POST">
                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION["csrf_token"]) ?>">
                             
                             <div class="mb-3">

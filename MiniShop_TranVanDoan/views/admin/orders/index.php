@@ -4,6 +4,10 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <!-- Form tìm kiếm và sắp xếp -->
     <form class="row gx-2 align-items-center" method="GET">
+        <input type="hidden" name="area" value="admin">
+        <input type="hidden" name="controller" value="order">
+        <input type="hidden" name="action" value="index">
+
         <div class="col-auto">
             <input type="text" name="keyword" class="form-control" placeholder="Tên khách hàng..." value="<?= htmlspecialchars($keyword) ?>">
         </div>
@@ -81,6 +85,10 @@
         <div class="d-flex align-items-center">
             <label class="me-2">Hiển thị:</label>
             <form method="GET">
+        <input type="hidden" name="area" value="admin">
+        <input type="hidden" name="controller" value="order">
+        <input type="hidden" name="action" value="index">
+
                 <input type="hidden" name="keyword" value="<?= htmlspecialchars($keyword) ?>">
                 <input type="hidden" name="sort" value="<?= htmlspecialchars($sort) ?>">
                 <select name="limit" class="form-select form-select-sm" onchange="this.form.submit()">
