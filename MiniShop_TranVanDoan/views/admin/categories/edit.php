@@ -1,4 +1,4 @@
-<?php ob_start();
+﻿<?php ob_start();
 ?>
 <div class="card shadow-sm" style="max-width: 600px; margin: 0 auto;">
     <div class="card-header bg-warning text-dark">
@@ -62,5 +62,5 @@
 </div>
 <?php
 $content = ob_get_clean();
-include '../layouts/master.php';
+include __DIR__ . '/../layouts/master.php';
 ?>

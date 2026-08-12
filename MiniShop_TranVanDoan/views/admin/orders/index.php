@@ -1,4 +1,4 @@
-<?php ob_start();
+﻿<?php ob_start();
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -132,5 +132,5 @@
 
 <?php
 $content = ob_get_clean();
-include '../layouts/master.php';
+include __DIR__ . '/../layouts/master.php';
 ?>
