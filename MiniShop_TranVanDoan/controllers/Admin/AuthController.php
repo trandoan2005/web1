@@ -5,6 +5,7 @@ use DAO\UserDAO;
 use Middleware\CsrfMiddleware;
 
 class AuthController
+{
     public function login()
     {
         $pageTitle = "Đăng nhập";
