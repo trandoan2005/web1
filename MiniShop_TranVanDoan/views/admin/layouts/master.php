@@ -1,17 +1,12 @@
 <?php
 // Master layout: nhận $pageTitle và $content từ các trang con
-require_once __DIR__ . '/../../../models/User.php';
-require_once __DIR__ . '/../../../middleware/AuthMiddleware.php';
-require_once __DIR__ . '/../../../middleware/CsrfMiddleware.php';
-
-AuthMiddleware::handle();
-CsrfMiddleware::generateToken();
+// Auth đã được kiểm tra ở index.php, không cần gọi lại ở đây
 
 $user = $_SESSION["user"] ?? null;
-include 'header.php';
+include __DIR__ . '/header.php';
 ?>
 <div class="d-flex">
-    <?php include 'sidebar.php'; ?>
+    <?php include __DIR__ . '/sidebar.php'; ?>
     <div class="flex-grow-1">
         <!-- Header Bar -->
         <div class="container-fluid d-flex justify-content-between align-items-center bg-white shadow-sm p-3">
@@ -32,6 +27,6 @@ include 'header.php';
             <h2 class="mb-4"><?= $pageTitle ?></h2>
             <?= $content ?>
         </div>
-        <?php include 'footer.php'; ?>
+        <?php include __DIR__ . '/footer.php'; ?>
     </div>
 </div>
