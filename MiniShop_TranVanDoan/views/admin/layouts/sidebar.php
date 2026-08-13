@@ -6,20 +6,20 @@ $baseUrl = '/TranVanDoan_LTW1/MiniShop_TranVanDoan/views/admin';
 ?>
 <div class="bg-dark text-white" id="sidebar-wrapper" style="min-height: 100vh; width: 250px;">
     <div class="sidebar-heading text-center py-4 border-bottom">
-        <h4><i class="bi bi-shop"></i> MiniShop</h4>
-        <small>Admin Panel</small>
+        <h4>🐓 GàĐáShop</h4>
+        <small>Quản Trị Trại Gà</small>
     <div class="list-group list-group-flush">
         <a href="index.php?area=admin&controller=dashboard&action=index" class="list-group-item list-group-item-action bg-dark text-white <?= (isset($_GET['controller']) && $_GET['controller'] == 'dashboard') ? 'active' : '' ?>">
             <i class="bi bi-speedometer2"></i> Dashboard
         </a>
         <a href="index.php?area=admin&controller=category&action=index" class="list-group-item list-group-item-action bg-dark text-white <?= (isset($_GET['controller']) && $_GET['controller'] == 'category') ? 'active' : '' ?>">
-            <i class="bi bi-grid"></i> Danh mục
+            <i class="bi bi-grid"></i> Dòng Gà
         </a>
         <a href="index.php?area=admin&controller=brand&action=index" class="list-group-item list-group-item-action bg-dark text-white <?= (isset($_GET['controller']) && $_GET['controller'] == 'brand') ? 'active' : '' ?>">
-            <i class="bi bi-bookmark-star"></i> Thương hiệu
+            <i class="bi bi-bookmark-star"></i> Xuất Xứ
         </a>
         <a href="index.php?area=admin&controller=product&action=index" class="list-group-item list-group-item-action bg-dark text-white <?= (isset($_GET['controller']) && $_GET['controller'] == 'product') ? 'active' : '' ?>">
-            <i class="bi bi-box-seam"></i> Sản phẩm
+            <i class="bi bi-box-seam"></i> Gà & Sản Phẩm
         </a>
         <a href="index.php?area=admin&controller=customer&action=index" class="list-group-item list-group-item-action bg-dark text-white <?= (isset($_GET['controller']) && $_GET['controller'] == 'customer') ? 'active' : '' ?>">
             <i class="bi bi-people"></i> Khách hàng

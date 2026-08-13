@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập - Quản trị</title>
+    <title>Đăng nhập - GàĐáShop</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
@@ -15,7 +15,7 @@
             <div class="col-md-5">
                 <div class="card shadow border-0 rounded-4">
                     <div class="card-body p-4">
-                        <h3 class="text-center mb-4 text-primary fw-bold">Đăng nhập</h3>
+                        <h3 class="text-center mb-4 text-primary fw-bold">🐓 GàĐáShop</h3>
                         
                         <form action="" method="POST">
                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION["csrf_token"]) ?>">
