@@ -10,8 +10,7 @@ class UserController
     {
 $pageTitle = "Quản lý Nhân viên";
 
-require_once __DIR__ . '/../../../middleware/AuthMiddleware.php';
-AuthMiddleware::checkAdmin();
+\Middleware\AuthMiddleware::checkAdmin();
 $userDAO = new UserDAO();
 
 // Xử lý Xóa
