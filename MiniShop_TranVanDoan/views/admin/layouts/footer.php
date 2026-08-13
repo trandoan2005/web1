@@ -1,6 +1,6 @@
 <footer class="bg-dark text-white text-center py-3 mt-auto">
     <div class="container-fluid">
-        <p class="mb-0">&copy; 2026 🐓 GàĐáShop Admin - Trần Văn Đoàn</p>
+        <p class="mb-0">&copy; 2026 👟 ShoeShop Admin - Trần Văn Đoàn</p>
     </div>
 </footer>
 <!-- Bootstrap 5 JS -->

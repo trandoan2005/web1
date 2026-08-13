@@ -1,5 +1,5 @@
 -- ==========================================
--- Lab 6: GàĐáShop - Cơ sở dữ liệu
+-- Lab 6: ShoeShop - Cơ sở dữ liệu
 -- Database: tranvandoan_database
 -- ==========================================
 
@@ -131,69 +131,69 @@ CREATE TABLE IF NOT EXISTS order_details (
 
 -- Danh mục
 INSERT INTO categories (name, description, image, status) VALUES
-('Gà Nòi Chiến', 'Các giống gà nòi thuần chủng chuyên đá', 'ga-noi-chien.jpg', 1),
-('Gà Chọi Lai', 'Gà lai tạo giữa các dòng gà chiến', 'ga-choi-lai.jpg', 1),
-('Thức Ăn & Dinh Dưỡng', 'Cám, thóc, vitamin bổ sung cho gà đá', 'thuc-an.jpg', 1),
-('Phụ Kiện & Dụng Cụ', 'Cựa sắt, bao cát, dây buộc, lồng tập', 'phu-kien.jpg', 1),
-('Thuốc & Chăm Sóc', 'Thuốc bổ, thuốc trị thương, dầu xoa bóp cho gà', 'thuoc-cham-soc.jpg', 1);
+('Giày Sneaker', 'Giày thể thao sneaker chính hãng các thương hiệu lớn', 'sneaker.jpg', 1),
+('Giày Chạy Bộ', 'Giày chạy bộ chuyên dụng, công nghệ đệm cao cấp', 'running.jpg', 1),
+('Giày Bóng Rổ', 'Giày bóng rổ performance và lifestyle', 'basketball.jpg', 1),
+('Giày Đá Bóng', 'Giày đá bóng sân cỏ tự nhiên và nhân tạo', 'football.jpg', 1),
+('Dép & Sandal', 'Dép và sandal thể thao chính hãng', 'sandal.jpg', 1);
 
--- Thương hiệu (Dòng gà / Xuất xứ)
+-- Thương hiệu
 INSERT INTO brands (name, logo, status) VALUES
-('Gà Bình Định', 'ga-binh-dinh.png', 1),
-('Gà Đòn Tây Sơn', 'ga-don-tay-son.png', 1),
-('Gà Tre Mỹ', 'ga-tre-my.png', 1),
-('Gà Peru', 'ga-peru.png', 1),
-('Gà Asil Ấn Độ', 'ga-asil.png', 1);
+('Nike', 'nike.png', 1),
+('Adidas', 'adidas.png', 1),
+('Jordan', 'jordan.png', 1),
+('New Balance', 'new-balance.png', 1),
+('Puma', 'puma.png', 1);
 
--- Sản phẩm (Gà đá + phụ kiện)
+-- Sản phẩm
 INSERT INTO products (category_id, brand_id, name, slug, old_price, sale_price, quantity, description, image, status) VALUES
-(1, 1, 'Gà Nòi Bình Định Điều Đỏ', 'ga-noi-binh-dinh-dieu-do', 5000000, 4500000, 10, 'Gà nòi thuần Bình Định, lông điều đỏ, chân vàng, thể hình chuẩn. Đã tập luyện 6 tháng, đá cựa sắc bén.', 'ga-noi-dieu-do.jpg', 1),
-(1, 2, 'Gà Đòn Tây Sơn Ô Chuối', 'ga-don-tay-son-o-chuoi', 7000000, 6500000, 8, 'Gà đòn dòng Tây Sơn lông ô chuối, đòn nặng, chịu đòn tốt. Đã qua 3 trận thắng liên tiếp.', 'ga-don-o-chuoi.jpg', 1),
-(1, 1, 'Gà Nòi Xám Bạc', 'ga-noi-xam-bac', 4500000, 4000000, 12, 'Gà nòi lông xám bạc, mình nhỏ nhưng nhanh nhẹn, đá liên hoàn cực kỳ hiệu quả.', 'ga-noi-xam-bac.jpg', 1),
-(2, 3, 'Gà Lai Tre Mỹ F1', 'ga-lai-tre-my-f1', 3500000, 3000000, 15, 'Gà lai F1 giữa gà Tre Mỹ và gà Nòi Việt. Thể hình đẹp, sức bền cao, phù hợp đá cựa.', 'ga-lai-tre-my.jpg', 1),
-(2, 4, 'Gà Lai Peru Chân Xanh', 'ga-lai-peru-chan-xanh', 8000000, 7500000, 5, 'Gà lai Peru nhập khẩu, chân xanh, lông đen tuyền. Đòn nặng, sức đá kinh hoàng.', 'ga-lai-peru.jpg', 1),
-(2, 5, 'Gà Asil Ấn Độ Thuần Chủng', 'ga-asil-an-do', 12000000, 11000000, 3, 'Gà Asil nhập từ Ấn Độ, dòng chiến binh cổ đại. Cơ bắp cuồn cuộn, đá chết bỏ.', 'ga-asil.jpg', 1),
-(3, 1, 'Cám Gà Đá Premium 5kg', 'cam-ga-da-premium', 350000, 300000, 100, 'Cám gà đá cao cấp, giàu protein và vitamin. Giúp gà tăng cơ, bền sức, lông mượt.', 'cam-ga-da.jpg', 1),
-(3, 1, 'Thóc Lức Ngâm Mật Ong', 'thoc-luc-ngam-mat-ong', 200000, 180000, 80, 'Thóc lức đỏ ngâm mật ong rừng. Bổ sung năng lượng, tăng sức đề kháng cho gà chiến.', 'thoc-luc.jpg', 1),
-(4, 1, 'Cựa Sắt Inox Cao Cấp (Đôi)', 'cua-sat-inox', 500000, 450000, 50, 'Cựa sắt inox không gỉ, sắc bén, thiết kế chuẩn thi đấu. Đã mài sẵn, kèm dây buộc.', 'cua-sat.jpg', 1),
-(5, 1, 'Dầu Nóng Xoa Bóp Gà Đá', 'dau-nong-xoa-bop', 150000, 120000, 200, 'Dầu nóng thảo dược chuyên dụng xoa bóp cho gà trước và sau trận đấu. Giảm đau, tan máu bầm.', 'dau-nong.jpg', 1);
+(1, 1, 'Nike Air Force 1 ''07 White', 'nike-air-force-1-07-white', 3200000, 2890000, 50, 'Giày Nike Air Force 1 ''07 màu trắng nguyên bản, chất liệu da cao cấp, đế Air êm ái. Icon kinh điển không bao giờ lỗi thời.', 'nike-af1-white.jpg', 1),
+(1, 2, 'Adidas Stan Smith White Green', 'adidas-stan-smith-white-green', 2800000, 2490000, 40, 'Adidas Stan Smith phối trắng xanh cổ điển, upper da thật mềm mại, đế cao su bền bỉ. Biểu tượng thời trang từ 1971.', 'adidas-stan-smith.jpg', 1),
+(1, 3, 'Air Jordan 1 Retro High OG Chicago', 'jordan-1-retro-high-chicago', 5500000, 4990000, 15, 'Jordan 1 Retro High OG phối màu Chicago huyền thoại. Da premium, cổ cao bảo vệ mắt cá chân. Phiên bản giới hạn.', 'jordan-1-chicago.jpg', 1),
+(2, 1, 'Nike Air Zoom Pegasus 41', 'nike-pegasus-41', 3800000, 3290000, 35, 'Giày chạy bộ Nike Pegasus 41 với công nghệ Zoom Air và React foam. Thoáng khí, nhẹ, phù hợp chạy hàng ngày.', 'nike-pegasus-41.jpg', 1),
+(2, 2, 'Adidas Ultraboost Light', 'adidas-ultraboost-light', 4500000, 3890000, 25, 'Adidas Ultraboost Light với đệm Boost nhẹ nhất từ trước đến nay, upper Primeknit+ ôm chân hoàn hảo. Chạy bộ êm như mây.', 'adidas-ultraboost.jpg', 1),
+(3, 1, 'Nike LeBron 21', 'nike-lebron-21', 5200000, 4690000, 20, 'Nike LeBron 21 với Zoom Air ở tiền bàn chân và Air Max ở gót. Bám sân tốt, hỗ trợ chuyển hướng nhanh trên sân bóng rổ.', 'nike-lebron-21.jpg', 1),
+(3, 3, 'Air Jordan 4 Retro Thunder', 'jordan-4-retro-thunder', 6800000, 5990000, 10, 'Jordan 4 Retro phối màu Thunder (đen vàng). Da nubuck cao cấp, đệm Air Sole, thiết kế cage bên hông đặc trưng.', 'jordan-4-thunder.jpg', 1),
+(4, 1, 'Nike Mercurial Superfly 9 Elite FG', 'nike-mercurial-superfly-9', 6500000, 5790000, 18, 'Giày đá bóng Nike Mercurial Superfly 9 Elite sân cỏ tự nhiên. Vaporposite upper siêu nhẹ, Zoom Air đệm gót, tốc độ tối đa.', 'nike-mercurial.jpg', 1),
+(4, 2, 'Adidas Predator Elite FG', 'adidas-predator-elite-fg', 5800000, 5190000, 22, 'Adidas Predator Elite cho sân cỏ tự nhiên. Upper Hybridtouch kiểm soát bóng chuẩn xác, đế Facetframe ổn định.', 'adidas-predator.jpg', 1),
+(5, 1, 'Nike Air Max 90 Slide', 'nike-air-max-90-slide', 1800000, 1490000, 60, 'Dép Nike Air Max 90 Slide với đệm Air Max huyền thoại. Quai da tổng hợp bền chắc, êm chân cả ngày dài.', 'nike-slide.jpg', 1);
 
 -- Ảnh sản phẩm
 INSERT INTO product_images (product_id, image_url, sort_order) VALUES
-(1, 'ga-noi-dieu-do_1.jpg', 1),
-(1, 'ga-noi-dieu-do_2.jpg', 2),
-(2, 'ga-don-o-chuoi_1.jpg', 1),
-(3, 'ga-noi-xam-bac_1.jpg', 1),
-(5, 'ga-lai-peru_1.jpg', 1);
+(1, 'nike-af1-white_1.jpg', 1),
+(1, 'nike-af1-white_2.jpg', 2),
+(2, 'adidas-stan-smith_1.jpg', 1),
+(3, 'jordan-1-chicago_1.jpg', 1),
+(5, 'adidas-ultraboost_1.jpg', 1);
 
 -- Users
 INSERT INTO users (username, password, fullname, email, phone, role, status) VALUES
-('admin', '123456', 'Chủ Trại Gà', 'admin@gadashop.com', '0901111111', 'admin', 1),
-('staff1', '123456', 'Nhân viên chăm gà', 'staff1@gadashop.com', '0902222222', 'staff', 1),
-('staff2', '123456', 'Nhân viên bán hàng', 'staff2@gadashop.com', '0903333333', 'staff', 1),
-('manager', '123456', 'Quản lý trại', 'manager@gadashop.com', '0904444444', 'manager', 1),
-('editor', '123456', 'Biên tập viên', 'editor@gadashop.com', '0905555555', 'editor', 1);
+('admin', '123456', 'Quản trị viên', 'admin@shoeshop.vn', '0901111111', 'admin', 1),
+('staff1', '123456', 'Nhân viên bán hàng', 'staff1@shoeshop.vn', '0902222222', 'staff', 1),
+('staff2', '123456', 'Nhân viên kho', 'staff2@shoeshop.vn', '0903333333', 'staff', 1),
+('manager', '123456', 'Quản lý cửa hàng', 'manager@shoeshop.vn', '0904444444', 'manager', 1),
+('editor', '123456', 'Biên tập nội dung', 'editor@shoeshop.vn', '0905555555', 'editor', 1);
 
 -- Khách hàng
 INSERT INTO customers (fullname, email, phone, address, status) VALUES
-('Nguyễn Văn Tài', 'nvt@gmail.com', '0911111111', '123 Quốc lộ 1A, Tuy Phước, Bình Định', 1),
-('Trần Minh Đức', 'tmd@gmail.com', '0922222222', '456 Nguyễn Huệ, An Nhơn, Bình Định', 1),
-('Lê Thanh Sơn', 'lts@gmail.com', '0933333333', '789 Trần Hưng Đạo, Q.5, TP.HCM', 1),
-('Phạm Hữu Phước', 'php@gmail.com', '0944444444', '321 Hai Bà Trưng, Quy Nhơn, Bình Định', 1),
-('Hoàng Đình Chiến', 'hdc@gmail.com', '0955555555', '654 Võ Văn Tần, Q.3, TP.HCM', 1);
+('Nguyễn Minh Khang', 'nmk@gmail.com', '0911111111', '123 Nguyễn Trãi, Q.1, TP.HCM', 1),
+('Trần Thị Hương', 'tth@gmail.com', '0922222222', '456 Lê Văn Sỹ, Q.3, TP.HCM', 1),
+('Lê Quốc Bảo', 'lqb@gmail.com', '0933333333', '789 Cách Mạng Tháng 8, Q.10, TP.HCM', 1),
+('Phạm Anh Tuấn', 'pat@gmail.com', '0944444444', '321 Trần Đại Nghĩa, Q.Bình Thạnh, TP.HCM', 1),
+('Hoàng Thu Trang', 'htt@gmail.com', '0955555555', '654 Phạm Văn Đồng, Q.Thủ Đức, TP.HCM', 1);
 
 -- Đơn hàng
 INSERT INTO orders (customer_id, total_amount, status, note) VALUES
-(1, 4500000, 'Đã giao', 'Giao tận trại'),
-(2, 6500000, 'Đang giao', NULL),
-(3, 7500000, 'Chờ xử lý', 'Gọi trước khi giao, gà cần vận chuyển cẩn thận'),
-(4, 300000, 'Đã giao', NULL),
-(5, 11000000, 'Đã hủy', 'Khách hủy đơn do thay đổi ý');
+(1, 4990000, 'Đã giao', 'Size 42, giao nhanh'),
+(2, 2490000, 'Đang giao', NULL),
+(3, 3290000, 'Chờ xử lý', 'Size 41, check hàng trước khi giao'),
+(4, 5790000, 'Đã giao', NULL),
+(5, 5990000, 'Đã hủy', 'Khách đổi ý, muốn size khác');
 
 -- Chi tiết đơn hàng
 INSERT INTO order_details (order_id, product_id, quantity, price) VALUES
-(1, 1, 1, 4500000),
-(2, 2, 1, 6500000),
-(3, 5, 1, 7500000),
-(4, 7, 1, 300000),
-(5, 6, 1, 11000000);
+(1, 3, 1, 4990000),
+(2, 2, 1, 2490000),
+(3, 4, 1, 3290000),
+(4, 8, 1, 5790000),
+(5, 7, 1, 5990000);
