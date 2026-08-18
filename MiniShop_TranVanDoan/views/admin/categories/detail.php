@@ -49,8 +49,8 @@
         </table>
         
         <div class="mt-3">
-            <a href="edit.php?id=<?= $category->id ?>" class="btn btn-warning"><i class="bi bi-pencil"></i> Sửa danh mục</a>
-            <a href="index.php" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>
+            <a href="index.php?area=admin&controller=category&action=edit&id=<?= $category->id ?>" class="btn btn-warning"><i class="bi bi-pencil"></i> Sửa danh mục</a>
+            <a href="index.php?area=admin&controller=category&action=index" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>
         </div>
     </div>
 </div>

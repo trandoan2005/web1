@@ -34,12 +34,12 @@
         </div>
         <?php if (!empty($keyword) || $sort != 'name_asc'): ?>
             <div class="col-auto">
-                <a href="index.php" class="btn btn-secondary">Hủy</a>
+                <a href="index.php?area=admin&controller=product&action=index" class="btn btn-secondary">Hủy</a>
             </div>
         <?php endif; ?>
     </form>
     
-    <a href="create.php" class="btn btn-success"><i class="bi bi-plus-lg"></i> Thêm mới</a>
+    <a href="index.php?area=admin&controller=product&action=create" class="btn btn-success"><i class="bi bi-plus-lg"></i> Thêm mới</a>
 </div>
 
 <?php if (empty($products)): ?>
@@ -87,8 +87,8 @@
                         </span>
                     </td>
                     <td>
-                        <a href="detail.php?id=<?= $item->id ?>" class="btn btn-sm btn-info text-white" title="Chi tiết"><i class="bi bi-eye"></i></a>
-                        <a href="edit.php?id=<?= $item->id ?>" class="btn btn-sm btn-warning" title="Sửa"><i class="bi bi-pencil"></i></a>
+                        <a href="index.php?area=admin&controller=product&action=detail&id=<?= $item->id ?>" class="btn btn-sm btn-info text-white" title="Chi tiết"><i class="bi bi-eye"></i></a>
+                        <a href="index.php?area=admin&controller=product&action=edit&id=<?= $item->id ?>" class="btn btn-sm btn-warning" title="Sửa"><i class="bi bi-pencil"></i></a>
                         <form method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa?');" class="d-inline">
                             <input type="hidden" name="id" value="<?= $item->id ?>">
                             <button type="submit" name="btnDelete" class="btn btn-sm btn-danger" title="Xóa"><i class="bi bi-trash"></i></button>
@@ -124,25 +124,25 @@
         <nav>
             <ul class="pagination mb-0">
                 <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=1">Đầu</a>
+                    <a class="page-link" href="index.php?area=admin&controller=product&action=index&keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=1">Đầu</a>
                 </li>
                 <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $page - 1 ?>">Trước</a>
+                    <a class="page-link" href="index.php?area=admin&controller=product&action=index&keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $page - 1 ?>">Trước</a>
                 </li>
                 
                 <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                     <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                        <a class="page-link" href="?keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $i ?>">
+                        <a class="page-link" href="index.php?area=admin&controller=product&action=index&keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $i ?>">
                             <?= $i ?>
                         </a>
                     </li>
                 <?php endfor; ?>
                 
                 <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $page + 1 ?>">Sau</a>
+                    <a class="page-link" href="index.php?area=admin&controller=product&action=index&keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $page + 1 ?>">Sau</a>
                 </li>
                 <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $totalPages ?>">Cuối</a>
+                    <a class="page-link" href="index.php?area=admin&controller=product&action=index&keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $totalPages ?>">Cuối</a>
                 </li>
             </ul>
         </nav>

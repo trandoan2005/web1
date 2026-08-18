@@ -4,8 +4,8 @@ require_once __DIR__ . '/autoload.php';
 session_start();
 
 // Nhận Request
-$area = $_GET["area"] ?? "admin";
-$controller = $_GET["controller"] ?? "product";
+$area = $_GET["area"] ?? "client";
+$controller = $_GET["controller"] ?? "home";
 $action = $_GET["action"] ?? "index";
 
 // *** Kiểm tra Authentication cho Admin

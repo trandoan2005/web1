@@ -170,5 +170,16 @@ class OrderDAO extends BaseDAO
             return [];
         }
     }
+
+    public function insertAndGetId($customerId, $totalAmount, $status, $note)
+    {
+        try {
+            $sql = "INSERT INTO orders (customer_id, total_amount, status, note) VALUES (?, ?, ?, ?)";
+            $stmt = $this->executePrepared($sql, "idis", $customerId, $totalAmount, $status, $note);
+            return $this->conn->insert_id;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 }
 ?>

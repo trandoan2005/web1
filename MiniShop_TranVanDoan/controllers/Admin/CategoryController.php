@@ -82,9 +82,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!in_array($extension, $allowExtensions)) {
             $errors[] = "Chỉ cho phép file JPG, JPEG, PNG hoặc WEBP.";
         }
-        $maxSize = 200 * 1024;
+        $maxSize = 5 * 1024 * 1024;
         if ($fileSize > $maxSize) {
-            $errors[] = "Kích thước hình ảnh <= 200 KB.";
+            $errors[] = "Kích thước hình ảnh <= 5 MB.";
         }
     }
 
@@ -92,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($fileName != "") {
             $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
             $image = time() . "_" . rand(1000, 9999) . "." . $extension;
-            $uploadPath = __DIR__ . "/../../../uploads/categories/" . $image;
+            $uploadPath = __DIR__ . "/../../uploads/categories/" . $image;
             move_uploaded_file($tmpName, $uploadPath);
         }
 
@@ -160,9 +160,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!in_array($extension, $allowExtensions)) {
             $errors[] = "Chỉ cho phép file JPG, JPEG, PNG hoặc WEBP.";
         }
-        $maxSize = 200 * 1024;
+        $maxSize = 5 * 1024 * 1024;
         if ($fileSize > $maxSize) {
-            $errors[] = "Kích thước hình ảnh <= 200 KB.";
+            $errors[] = "Kích thước hình ảnh <= 5 MB.";
         }
     }
 
@@ -170,11 +170,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($fileName != "") {
             $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
             $image = time() . "_" . rand(1000, 9999) . "." . $extension;
-            $uploadPath = __DIR__ . "/../../../uploads/categories/" . $image;
+            $uploadPath = __DIR__ . "/../../uploads/categories/" . $image;
 
             // Xóa hình cũ
             if (!empty($catOld->image)) {
-                $oldImage = __DIR__ . "/../../../uploads/categories/" . $catOld->image;
+                $oldImage = __DIR__ . "/../../uploads/categories/" . $catOld->image;
                 if (file_exists($oldImage)) {
                     unlink($oldImage);
                 }

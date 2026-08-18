@@ -92,8 +92,8 @@
         </div>
         
         <div class="mt-4 text-center border-top pt-3">
-            <a href="edit.php?id=<?= $product->id ?>" class="btn btn-warning"><i class="bi bi-pencil"></i> Sửa sản phẩm</a>
-            <a href="index.php" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>
+            <a href="index.php?area=admin&controller=product&action=edit&id=<?= $product->id ?>" class="btn btn-warning"><i class="bi bi-pencil"></i> Sửa sản phẩm</a>
+            <a href="index.php?area=admin&controller=product&action=index" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>
         </div>
     </div>
 </div>

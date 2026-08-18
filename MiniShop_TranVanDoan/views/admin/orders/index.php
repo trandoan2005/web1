@@ -25,7 +25,7 @@
         </div>
         <?php if (!empty($keyword) || $sort != 'newest'): ?>
             <div class="col-auto">
-                <a href="index.php" class="btn btn-secondary">Hủy</a>
+                <a href="index.php?area=admin&controller=order&action=index" class="btn btn-secondary">Hủy</a>
             </div>
         <?php endif; ?>
     </form>
@@ -72,7 +72,7 @@
                     </td>
                     <td><?= date('d/m/Y H:i', strtotime($item->createdAt)) ?></td>
                     <td>
-                        <a href="detail.php?id=<?= $item->id ?>" class="btn btn-sm btn-info text-white" title="Chi tiết"><i class="bi bi-eye"></i></a>
+                        <a href="index.php?area=admin&controller=order&action=detail&id=<?= $item->id ?>" class="btn btn-sm btn-info text-white" title="Chi tiết"><i class="bi bi-eye"></i></a>
                         <a href="update_status.php?id=<?= $item->id ?>" class="btn btn-sm btn-warning" title="Cập nhật trạng thái"><i class="bi bi-pencil"></i></a>
                     </td>
                 </tr>
@@ -104,25 +104,25 @@
         <nav>
             <ul class="pagination mb-0">
                 <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=1">Đầu</a>
+                    <a class="page-link" href="index.php?area=admin&controller=order&action=index&keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=1">Đầu</a>
                 </li>
                 <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $page - 1 ?>">Trước</a>
+                    <a class="page-link" href="index.php?area=admin&controller=order&action=index&keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $page - 1 ?>">Trước</a>
                 </li>
                 
                 <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                     <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                        <a class="page-link" href="?keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $i ?>">
+                        <a class="page-link" href="index.php?area=admin&controller=order&action=index&keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $i ?>">
                             <?= $i ?>
                         </a>
                     </li>
                 <?php endfor; ?>
                 
                 <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $page + 1 ?>">Sau</a>
+                    <a class="page-link" href="index.php?area=admin&controller=order&action=index&keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $page + 1 ?>">Sau</a>
                 </li>
                 <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $totalPages ?>">Cuối</a>
+                    <a class="page-link" href="index.php?area=admin&controller=order&action=index&keyword=<?= urlencode($keyword) ?>&sort=<?= $sort ?>&limit=<?= $limit ?>&page=<?= $totalPages ?>">Cuối</a>
                 </li>
             </ul>
         </nav>

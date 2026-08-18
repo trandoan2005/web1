@@ -47,8 +47,8 @@
         </table>
         
         <div class="mt-3">
-            <a href="edit.php?id=<?= $obj->id ?>" class="btn btn-warning"><i class="bi bi-pencil"></i> Sửa</a>
-            <a href="index.php" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>
+            <a href="index.php?area=admin&controller=customer&action=edit&id=<?= $obj->id ?>" class="btn btn-warning"><i class="bi bi-pencil"></i> Sửa</a>
+            <a href="index.php?area=admin&controller=customer&action=index" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>
         </div>
     </div>
 </div>

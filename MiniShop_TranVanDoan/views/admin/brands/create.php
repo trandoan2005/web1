@@ -44,7 +44,7 @@
             <div class="text-center">
                 <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save"></i> Lưu</button>
                 <button type="reset" class="btn btn-warning px-4"><i class="bi bi-arrow-counterclockwise"></i> Làm mới</button>
-                <a href="index.php" class="btn btn-secondary px-4"><i class="bi bi-arrow-left"></i> Quay lại</a>
+                <a href="index.php?area=admin&controller=brand&action=index" class="btn btn-secondary px-4"><i class="bi bi-arrow-left"></i> Quay lại</a>
             </div>
         </form>
     </div>

@@ -1,4 +1,4 @@
-﻿<?php ob_start();
+<?php ob_start();
 ?>
 <div class="card shadow-sm">
     <div class="card-header bg-warning text-dark">
@@ -90,8 +90,8 @@
                     <div class="d-flex flex-wrap gap-3">
                         <?php foreach ($galleryImages as $img): ?>
                             <div class="position-relative">
-                                <img src="uploads/products/<?= htmlspecialchars($img['image']) ?>" class="img-thumbnail" width="100">
-                                <a href="edit.php?id=<?= $id ?>&delete_image_id=<?= $img['id'] ?>&image_name=<?= $img['image'] ?>" class="btn btn-sm btn-danger position-absolute top-0 end-0" onclick="return confirm('Xóa hình này?');">X</a>
+                                <img src="uploads/products/<?= htmlspecialchars($img['image_url']) ?>" class="img-thumbnail" width="100">
+                                <a href="index.php?area=admin&controller=product&action=edit&id=<?= $id ?>&delete_image_id=<?= $img['id'] ?>&image_name=<?= $img['image_url'] ?>" class="btn btn-sm btn-danger position-absolute top-0 end-0" onclick="return confirm('Xóa hình này?');">X</a>
                             </div>
                         <?php endforeach; ?>
                     </div>
@@ -127,7 +127,7 @@
             <hr>
             <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Cập nhật</button>
             <button type="reset" class="btn btn-warning"><i class="bi bi-arrow-counterclockwise"></i> Làm mới</button>
-            <a href="index.php" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>
+            <a href="index.php?area=admin&controller=product&action=index" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>
         </form>
     </div>
 </div>

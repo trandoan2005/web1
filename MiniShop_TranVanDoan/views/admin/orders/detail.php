@@ -43,7 +43,7 @@
                 </table>
                 <div class="mt-3 text-center border-top pt-3">
                     <a href="update_status.php?id=<?= $order->id ?>" class="btn btn-warning"><i class="bi bi-arrow-repeat"></i> Cập nhật trạng thái</a>
-                    <a href="index.php" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>
+                    <a href="index.php?area=admin&controller=order&action=index" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Quay lại</a>
                 </div>
             </div>
         </div>

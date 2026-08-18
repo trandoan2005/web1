@@ -52,7 +52,7 @@
                 <?php if (!$isLocked): ?>
                     <button type="submit" class="btn btn-primary px-4"><i class="bi bi-save"></i> Cập nhật</button>
                 <?php endif; ?>
-                <a href="detail.php?id=<?= $order->id ?>" class="btn btn-secondary px-4"><i class="bi bi-arrow-left"></i> Quay lại</a>
+                <a href="index.php?area=admin&controller=order&action=detail&id=<?= $order->id ?>" class="btn btn-secondary px-4"><i class="bi bi-arrow-left"></i> Quay lại</a>
             </div>
         </form>
     </div>

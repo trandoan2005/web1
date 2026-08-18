@@ -2,6 +2,7 @@
 namespace Controllers\Admin;
 
 use DAO\OrderDAO;
+use DAO\OrderDetailDAO;
 use Middleware\CsrfMiddleware;
 
 class OrderController

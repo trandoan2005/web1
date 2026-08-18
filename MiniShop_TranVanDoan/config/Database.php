@@ -8,32 +8,30 @@ class Database
     private $username = "root";
     private $password = "";
     public $conn;
+    
+    private static $sharedConn = null;
 
     public function __construct()
     {
-        try {
-            $this->conn = new \mysqli($this->host, $this->username, $this->password, $this->database);
+        if (self::$sharedConn === null) {
+            try {
+                self::$sharedConn = new \mysqli($this->host, $this->username, $this->password, $this->database);
 
-            if ($this->conn->connect_error) {
-                throw new \Exception("Kết nối thất bại: " . $this->conn->connect_error);
+                if (self::$sharedConn->connect_error) {
+                    throw new \Exception("Kết nối thất bại: " . self::$sharedConn->connect_error);
+                }
+
+                self::$sharedConn->set_charset("utf8mb4");
+            } catch (\Exception $e) {
+                die("Lỗi kết nối CSDL: " . $e->getMessage());
             }
-
-            $this->conn->set_charset("utf8mb4");
-        } catch (\Exception $e) {
-            die("Lỗi kết nối CSDL: " . $e->getMessage());
         }
+        $this->conn = self::$sharedConn;
     }
 
     public function getConnection()
     {
         return $this->conn;
-    }
-
-    public function __destruct()
-    {
-        if ($this->conn) {
-            $this->conn->close();
-        }
     }
 }
 ?>

@@ -48,5 +48,16 @@ class OrderDetailDAO extends BaseDAO
             return false;
         }
     }
+
+    public function insertDetail($orderId, $productId, $quantity, $price)
+    {
+        try {
+            $sql = "INSERT INTO order_details (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
+            $stmt = $this->executePrepared($sql, "iiid", $orderId, $productId, $quantity, $price);
+            return $stmt->affected_rows > 0;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 }
 ?>
