@@ -99,12 +99,41 @@ CREATE TABLE IF NOT EXISTS customers (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ==========================================
+-- Bảng banners
+-- ==========================================
+CREATE TABLE IF NOT EXISTS banners (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  image VARCHAR(255) NOT NULL,
+  link VARCHAR(255) DEFAULT '',
+  sort_order INT DEFAULT 0,
+  status TINYINT DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ==========================================
+-- Bảng coupons (Mã giảm giá)
+-- ==========================================
+CREATE TABLE IF NOT EXISTS coupons (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  code VARCHAR(50) NOT NULL UNIQUE,
+  discount_percent INT NOT NULL,
+  max_usage INT DEFAULT 0,
+  used_count INT DEFAULT 0,
+  valid_until DATE,
+  status TINYINT DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ==========================================
 -- Bảng orders (Đơn hàng)
 -- ==========================================
 CREATE TABLE IF NOT EXISTS orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT NOT NULL,
     total_amount DECIMAL(15,0) NOT NULL DEFAULT 0,
+    discount_amount DECIMAL(15,0) DEFAULT 0,
     status VARCHAR(30) NOT NULL DEFAULT 'Chờ xử lý',
     note TEXT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

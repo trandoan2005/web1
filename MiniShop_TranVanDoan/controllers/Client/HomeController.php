@@ -4,6 +4,7 @@ namespace Controllers\Client;
 use DAO\ProductDAO;
 use DAO\CategoryDAO;
 use DAO\BrandDAO;
+use DAO\BannerDAO;
 
 class HomeController
 {
@@ -14,10 +15,14 @@ class HomeController
         $productDAO = new ProductDAO();
         $categoryDAO = new CategoryDAO();
         $brandDAO = new BrandDAO();
+        $bannerDAO = new BannerDAO();
 
         // Lấy danh mục & thương hiệu cho header
         $categories = $categoryDAO->getAll();
         $brands = $brandDAO->getAll();
+
+        // Lấy banner đang hoạt động
+        $banners = $bannerDAO->getActiveBanners();
 
         // Sản phẩm mới nhất (8 sp)
         $latestProducts = $productDAO->getClientProducts(8, 0, "", "newest");

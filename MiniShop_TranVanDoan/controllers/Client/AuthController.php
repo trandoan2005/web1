@@ -76,8 +76,16 @@ class AuthController
             $password = $_POST['password'] ?? '';
             $re_password = $_POST['re_password'] ?? '';
 
+            // Regex validate
+            $phoneRegex = "/^(0[3|5|7|8|9])+([0-9]{8})$/";
+            $emailRegex = "/^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$/";
+
             if (empty($fullname) || empty($phone) || empty($password) || empty($re_password)) {
                 $errors[] = "Vui lòng nhập đầy đủ các trường bắt buộc (*).";
+            } else if (!preg_match($phoneRegex, $phone)) {
+                $errors[] = "Số điện thoại không hợp lệ (phải bắt đầu bằng 03, 05, 07, 08, 09 và đủ 10 số).";
+            } else if (!empty($email) && !preg_match($emailRegex, $email)) {
+                $errors[] = "Địa chỉ email không đúng định dạng.";
             } else if ($password !== $re_password) {
                 $errors[] = "Mật khẩu nhập lại không khớp.";
             } else if (strlen($password) < 6) {

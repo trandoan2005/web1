@@ -162,6 +162,71 @@ class CartController
         exit;
     }
 
+    // Áp dụng mã giảm giá (AJAX)
+    public function applyCoupon()
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            echo json_encode(["success" => false, "message" => "Method not allowed"]);
+            exit;
+        }
+
+        $code = trim($_POST['code'] ?? "");
+        if ($code === "") {
+            echo json_encode(["success" => false, "message" => "Vui lòng nhập mã giảm giá"]);
+            exit;
+        }
+
+        $couponDAO = new \DAO\CouponDAO();
+        $coupon = $couponDAO->findByCode($code);
+
+        if (!$coupon) {
+            echo json_encode(["success" => false, "message" => "Mã giảm giá không tồn tại"]);
+            exit;
+        }
+
+        if ($coupon->status == 0) {
+            echo json_encode(["success" => false, "message" => "Mã giảm giá đã bị khóa"]);
+            exit;
+        }
+
+        if ($coupon->maxUsage > 0 && $coupon->usedCount >= $coupon->maxUsage) {
+            echo json_encode(["success" => false, "message" => "Mã giảm giá đã hết lượt sử dụng"]);
+            exit;
+        }
+
+        if ($coupon->validUntil && strtotime($coupon->validUntil) < strtotime(date('Y-m-d'))) {
+            echo json_encode(["success" => false, "message" => "Mã giảm giá đã hết hạn"]);
+            exit;
+        }
+
+        // Lưu vào session
+        $_SESSION['coupon'] = [
+            'id' => $coupon->id,
+            'code' => $coupon->code,
+            'discount_percent' => $coupon->discountPercent
+        ];
+
+        echo json_encode([
+            "success" => true,
+            "message" => "Áp dụng mã thành công!",
+            "discount_percent" => $coupon->discountPercent
+        ]);
+        exit;
+    }
+
+    // Xóa mã giảm giá (AJAX)
+    public function removeCoupon()
+    {
+        header('Content-Type: application/json; charset=utf-8');
+        if (isset($_SESSION['coupon'])) {
+            unset($_SESSION['coupon']);
+        }
+        echo json_encode(["success" => true, "message" => "Đã gỡ mã giảm giá"]);
+        exit;
+    }
+
     // Trang đặt hàng (Checkout)
     public function checkout()
     {
@@ -193,9 +258,16 @@ class CartController
             $address  = trim($_POST["address"] ?? "");
             $note     = trim($_POST["note"] ?? "");
 
+            // RegEx Validate Phone
+            $phoneRegex = "/^(0[3|5|7|8|9])+([0-9]{8})$/";
+
             // Validate
             if ($fullname === "") $errors[] = "Vui lòng nhập họ tên.";
-            if ($phone === "")    $errors[] = "Vui lòng nhập số điện thoại.";
+            if ($phone === "") {
+                $errors[] = "Vui lòng nhập số điện thoại.";
+            } elseif (!preg_match($phoneRegex, $phone)) {
+                $errors[] = "Số điện thoại không hợp lệ (phải bắt đầu bằng 03, 05, 07, 08, 09 và đủ 10 số).";
+            }
             if ($address === "")  $errors[] = "Vui lòng nhập địa chỉ nhận hàng.";
 
             if (empty($errors)) {
@@ -227,11 +299,22 @@ class CartController
                     }
 
                     // Tạo đơn hàng
-                    $orderId = $orderDAO->insertAndGetId($customerId, $total, "Chờ xử lý", $note);
+                    $discountAmount = 0;
+                    if (isset($_SESSION['coupon'])) {
+                        $discountAmount = ($total * $_SESSION['coupon']['discount_percent']) / 100;
+                    }
+                    $orderId = $orderDAO->insertAndGetIdWithDiscount($customerId, $total, $discountAmount, "Chờ xử lý", $note);
 
                     // Tạo chi tiết đơn hàng
                     foreach ($cart as $item) {
                         $orderDetailDAO->insertDetail($orderId, $item["productId"], $item["quantity"], $item["price"]);
+                    }
+                    
+                    // Tăng số lần sử dụng của coupon
+                    if (isset($_SESSION['coupon'])) {
+                        $couponDAO = new \DAO\CouponDAO();
+                        $couponDAO->incrementUsage($_SESSION['coupon']['id']);
+                        unset($_SESSION['coupon']);
                     }
 
                     $orderDAO->commitTransaction();

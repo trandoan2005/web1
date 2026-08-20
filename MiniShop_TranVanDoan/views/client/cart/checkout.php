@@ -87,10 +87,37 @@
                             <?php endforeach; ?>
                         </div>
                         
+                        <?php 
+                        $discount = 0;
+                        if (isset($_SESSION['coupon'])) {
+                            $discount = ($total * $_SESSION['coupon']['discount_percent']) / 100;
+                        }
+                        $finalTotal = $total - $discount;
+                        ?>
+
+                        <!-- Nơi nhập mã giảm giá -->
+                        <div class="mb-4 pb-3 border-bottom">
+                            <div class="input-group">
+                                <input type="text" id="couponCode" class="form-control" placeholder="Mã giảm giá" value="<?= htmlspecialchars($_SESSION['coupon']['code'] ?? '') ?>" <?= isset($_SESSION['coupon']) ? 'disabled' : '' ?>>
+                                <?php if (isset($_SESSION['coupon'])): ?>
+                                    <button class="btn btn-outline-danger" type="button" id="btnRemoveCoupon">Gỡ</button>
+                                <?php else: ?>
+                                    <button class="btn btn-dark" type="button" id="btnApplyCoupon">Áp dụng</button>
+                                <?php endif; ?>
+                            </div>
+                            <div id="couponMessage" class="mt-2 small"></div>
+                        </div>
+
                         <div class="d-flex justify-content-between mb-2 text-muted">
                             <span>Tạm tính</span>
                             <span><?= number_format($total, 0, ',', '.') ?>₫</span>
                         </div>
+                        <?php if (isset($_SESSION['coupon'])): ?>
+                        <div class="d-flex justify-content-between mb-2 text-success">
+                            <span>Giảm giá (<?= $_SESSION['coupon']['discount_percent'] ?>%)</span>
+                            <span>-<?= number_format($discount, 0, ',', '.') ?>₫</span>
+                        </div>
+                        <?php endif; ?>
                         <div class="d-flex justify-content-between mb-3 text-muted">
                             <span>Phí vận chuyển</span>
                             <span>Miễn phí</span>
@@ -98,7 +125,7 @@
                         <hr>
                         <div class="d-flex justify-content-between mb-4">
                             <span class="fs-5 fw-bold">Tổng cộng</span>
-                            <span class="fs-4 fw-bold text-danger"><?= number_format($total, 0, ',', '.') ?>₫</span>
+                            <span class="fs-4 fw-bold text-danger"><?= number_format($finalTotal, 0, ',', '.') ?>₫</span>
                         </div>
 
                         <div class="d-grid gap-2">
@@ -114,5 +141,66 @@
 
 <?php
 $content = ob_get_clean();
+
+// Add scripts for Coupon
+ob_start();
+?>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const btnApply = document.getElementById('btnApplyCoupon');
+    const btnRemove = document.getElementById('btnRemoveCoupon');
+    const codeInput = document.getElementById('couponCode');
+    const messageDiv = document.getElementById('couponMessage');
+
+    if (btnApply) {
+        btnApply.addEventListener('click', function() {
+            const code = codeInput.value.trim();
+            if (code === "") {
+                messageDiv.innerHTML = '<span class="text-danger">Vui lòng nhập mã giảm giá.</span>';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('code', code);
+
+            fetch('index.php?area=client&controller=cart&action=applyCoupon', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload(); // Reload to calculate total
+                } else {
+                    messageDiv.innerHTML = '<span class="text-danger">' + data.message + '</span>';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    }
+
+    if (btnRemove) {
+        btnRemove.addEventListener('click', function() {
+            fetch('index.php?area=client&controller=cart&action=removeCoupon', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload(); // Reload to remove discount
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    }
+});
+</script>
+<?php
+$additionalScripts = ob_get_clean();
+
 include __DIR__ . '/../layouts/master.php';
 ?>

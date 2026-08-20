@@ -18,21 +18,29 @@ class ProductController
         $categories = $categoryDAO->getAll();
         $brands = $brandDAO->getAll();
 
-        // Phân trang
+        // Phân trang & Lọc
         $keyword = trim($_GET["keyword"] ?? "");
         $sort = $_GET["sort"] ?? "newest";
+        
+        $filters = [];
+        if (isset($_GET['min_price']) && $_GET['min_price'] !== '') $filters['min_price'] = (float)$_GET['min_price'];
+        if (isset($_GET['max_price']) && $_GET['max_price'] !== '') $filters['max_price'] = (float)$_GET['max_price'];
+        if (isset($_GET['is_sale'])) $filters['is_sale'] = 1;
+        if (isset($_GET['category_id']) && $_GET['category_id'] !== '') $filters['category_id'] = (int)$_GET['category_id'];
+        if (isset($_GET['brand_id']) && $_GET['brand_id'] !== '') $filters['brand_id'] = (int)$_GET['brand_id'];
+
         $limit = 12;
         $page = (int)($_GET["page"] ?? 1);
         $offset = ($page - 1) * $limit;
 
-        $totalRecords = $productDAO->countClient($keyword);
+        $totalRecords = $productDAO->countClient($keyword, $filters);
         $totalPages = ceil($totalRecords / $limit);
         if ($page > $totalPages && $totalPages > 0) {
             $page = $totalPages;
             $offset = ($page - 1) * $limit;
         }
 
-        $products = $productDAO->getClientProducts($limit, $offset, $keyword, $sort);
+        $products = $productDAO->getClientProducts($limit, $offset, $keyword, $sort, $filters);
 
         require_once __DIR__ . '/../../views/client/products.php';
     }

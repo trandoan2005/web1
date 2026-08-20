@@ -27,6 +27,12 @@ $baseUrl = '/TranVanDoan_LTW1/MiniShop_TranVanDoan/views/admin';
         <a href="index.php?area=admin&controller=user&action=index" class="list-group-item list-group-item-action bg-dark text-white <?= (isset($_GET['controller']) && $_GET['controller'] == 'user') ? 'active' : '' ?>">
             <i class="bi bi-person-gear"></i> Người dùng
         </a>
+        <a href="index.php?area=admin&controller=banner&action=index" class="list-group-item list-group-item-action bg-dark text-white <?= (isset($_GET['controller']) && $_GET['controller'] == 'banner') ? 'active' : '' ?>">
+            <i class="bi bi-images"></i> Banners
+        </a>
+        <a href="index.php?area=admin&controller=coupon&action=index" class="list-group-item list-group-item-action bg-dark text-white <?= (isset($_GET['controller']) && $_GET['controller'] == 'coupon') ? 'active' : '' ?>">
+            <i class="bi bi-tags"></i> Khuyến mãi
+        </a>
         <a href="index.php?area=admin&controller=order&action=index" class="list-group-item list-group-item-action bg-dark text-white <?= (isset($_GET['controller']) && $_GET['controller'] == 'order') ? 'active' : '' ?>">
             <i class="bi bi-cart3"></i> Đơn hàng
         </a>

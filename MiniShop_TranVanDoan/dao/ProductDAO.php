@@ -194,14 +194,51 @@ class ProductDAO extends BaseDAO
 
     // ===== CLIENT METHODS =====
 
-    // Lấy sản phẩm cho trang client (chỉ status = 1)
-    public function getClientProducts(int $limit, int $offset, string $keyword = "", string $sort = "newest")
+    // Lấy sản phẩm cho trang client (chỉ status = 1) với bộ lọc nâng cao
+    public function getClientProducts(int $limit, int $offset, string $keyword = "", string $sort = "newest", array $filters = [])
     {
         $sql = "SELECT p.*, c.name as cateName, b.name as brandName 
                 FROM products p 
                 INNER JOIN categories c ON p.category_id = c.id 
                 INNER JOIN brands b ON p.brand_id = b.id 
-                WHERE p.status = 1 AND p.name LIKE ?";
+                WHERE p.status = 1";
+        
+        $types = "";
+        $params = [];
+
+        if (!empty($keyword)) {
+            $sql .= " AND p.name LIKE ?";
+            $types .= "s";
+            $params[] = "%$keyword%";
+        }
+        
+        if (isset($filters['min_price']) && is_numeric($filters['min_price'])) {
+            $sql .= " AND p.sale_price >= ?";
+            $types .= "d";
+            $params[] = $filters['min_price'];
+        }
+        
+        if (isset($filters['max_price']) && is_numeric($filters['max_price'])) {
+            $sql .= " AND p.sale_price <= ?";
+            $types .= "d";
+            $params[] = $filters['max_price'];
+        }
+        
+        if (isset($filters['is_sale']) && $filters['is_sale'] == 1) {
+            $sql .= " AND p.old_price > p.sale_price";
+        }
+
+        if (isset($filters['category_id']) && is_numeric($filters['category_id'])) {
+            $sql .= " AND p.category_id = ?";
+            $types .= "i";
+            $params[] = $filters['category_id'];
+        }
+
+        if (isset($filters['brand_id']) && is_numeric($filters['brand_id'])) {
+            $sql .= " AND p.brand_id = ?";
+            $types .= "i";
+            $params[] = $filters['brand_id'];
+        }
         
         $orderClause = "ORDER BY p.id DESC";
         if ($sort === "name_asc") $orderClause = "ORDER BY p.name ASC";
@@ -210,11 +247,15 @@ class ProductDAO extends BaseDAO
         else if ($sort === "price_desc") $orderClause = "ORDER BY p.sale_price DESC";
 
         $sql .= " $orderClause LIMIT ? OFFSET ?";
+        $types .= "ii";
+        $params[] = $limit;
+        $params[] = $offset;
 
         try {
             $stmt = $this->conn->prepare($sql);
-            $kw = "%$keyword%";
-            $stmt->bind_param("sii", $kw, $limit, $offset);
+            if (!empty($types)) {
+                $stmt->bind_param($types, ...$params);
+            }
             $stmt->execute();
             $result = $stmt->get_result();
             $list = [];
@@ -228,13 +269,51 @@ class ProductDAO extends BaseDAO
     }
 
     // Đếm sản phẩm client
-    public function countClient(string $keyword = "")
+    public function countClient(string $keyword = "", array $filters = [])
     {
         try {
-            $sql = "SELECT COUNT(*) AS total FROM products WHERE status = 1 AND name LIKE ?";
+            $sql = "SELECT COUNT(*) AS total FROM products p WHERE p.status = 1";
+            $types = "";
+            $params = [];
+
+            if (!empty($keyword)) {
+                $sql .= " AND p.name LIKE ?";
+                $types .= "s";
+                $params[] = "%$keyword%";
+            }
+            
+            if (isset($filters['min_price']) && is_numeric($filters['min_price'])) {
+                $sql .= " AND p.sale_price >= ?";
+                $types .= "d";
+                $params[] = $filters['min_price'];
+            }
+            
+            if (isset($filters['max_price']) && is_numeric($filters['max_price'])) {
+                $sql .= " AND p.sale_price <= ?";
+                $types .= "d";
+                $params[] = $filters['max_price'];
+            }
+            
+            if (isset($filters['is_sale']) && $filters['is_sale'] == 1) {
+                $sql .= " AND p.old_price > p.sale_price";
+            }
+
+            if (isset($filters['category_id']) && is_numeric($filters['category_id'])) {
+                $sql .= " AND p.category_id = ?";
+                $types .= "i";
+                $params[] = $filters['category_id'];
+            }
+
+            if (isset($filters['brand_id']) && is_numeric($filters['brand_id'])) {
+                $sql .= " AND p.brand_id = ?";
+                $types .= "i";
+                $params[] = $filters['brand_id'];
+            }
+
             $stmt = $this->conn->prepare($sql);
-            $kw = "%$keyword%";
-            $stmt->bind_param("s", $kw);
+            if (!empty($types)) {
+                $stmt->bind_param($types, ...$params);
+            }
             $stmt->execute();
             $row = $stmt->get_result()->fetch_assoc();
             return (int)$row["total"];
